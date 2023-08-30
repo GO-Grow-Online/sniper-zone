@@ -17,11 +17,11 @@ jQuery(function($) {
                 $.get(video_url, function(data) {
                     $source.attr('src', video_url);
                     video[0].load();
-                    $(this).on('progress', function(event) {
+                    data.on('progress', function(event) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
                         console.log('Chargement en cours : ' + progress + '%');
                     });
-                    $(this).on('canplaythrough', function() {
+                    data.on('canplaythrough', function() {
                         loadedSources++;
 
                         if (loadedSources === totalSources) {
