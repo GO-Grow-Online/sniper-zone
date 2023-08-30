@@ -11,6 +11,7 @@ jQuery(function($) {
         function updateProgress() {
             var progress = Math.floor((loadedResources / totalResources) * 100);
             console.log('Chargement de la page en cours : ' + progress + '%');
+            $('.loadingScreen-indicator-value').text(progress);
         }
     
         function checkAllResourcesLoaded() {
