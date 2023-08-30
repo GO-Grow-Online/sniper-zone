@@ -4,40 +4,47 @@ jQuery(function($) {
     loadApp();
 
     function loadApp() {
-        var video = $('#video');
-        var sources = video.find('source');
-        var totalSources = sources.length;
-        var loadedSources = 0;
+        var totalResources = $('img, video, audio, link[rel="stylesheet"], script').length;
+        var loadedResources = 0;
 
-        if (video.length) {
-            sources.each(function() {
-                var video_url = $(this).attr('src');
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', video_url, true);
-                xhr.responseType = 'blob';
-
-                // Get and display current download progress
-                xhr.onprogress = function(event) {
-                    if (event.lengthComputable) {
-                        var progress = Math.floor((event.loaded / event.total) * 100);
-                        $('.loadingScreen-indicator-value').text(progress);
-                    }
-                };
-
-                // Hide loading screen
-                xhr.onload = function() {
-                    loadedSources++;
-
-                    if (loadedSources === totalSources) {
-                        $('body').removeClass('loading');
-                        console.log('Toutes les vidéos ont été chargées.');
-                    }
-                };
-
-                xhr.send();
-            });
+        function updateProgress() {
+            var progress = Math.floor((loadedResources / totalResources) * 100);
+            console.log('Chargement de la page en cours : ' + progress + '%');
         }
+
+        function checkAllResourcesLoaded() {
+            loadedResources++;
+
+            if (loadedResources === totalResources) {
+                $('body').removeClass('loading');
+                console.log('Tous les éléments de la page ont été chargés.');
+            }
+
+            updateProgress();
+        }
+
+        // Observer pour les images
+        $('img').on('load', checkAllResourcesLoaded);
+
+        // Observer pour les vidéos
+        $('video').on('canplaythrough', checkAllResourcesLoaded);
+
+        // Observer pour les fichiers audio
+        $('audio').on('canplaythrough', checkAllResourcesLoaded);
+
+        // Observer pour les feuilles de style
+        $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
+
+        // Observer pour les scripts
+        $('script').on('load', checkAllResourcesLoaded);
+
+        // Observer pour les éléments qui ne déclenchent pas d'événement de chargement
+        setTimeout(function() {
+            checkAllResourcesLoaded();
+        }, 1000); // Vérification finale après 1 seconde
+
+        // Affichage initial de la progression
+        updateProgress();
     }
 
     function stepChange(nextStep) {
