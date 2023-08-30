@@ -4,7 +4,7 @@ jQuery(function($) {
     loadApp();
 
     function loadApp() {
-        var totalResources = $('img, video, audio, link[rel="stylesheet"], script').length;
+        var totalResources = $('img, video, link[rel="stylesheet"], script').length;
         var loadedResources = 0;
 
         function updateProgress() {
@@ -28,9 +28,6 @@ jQuery(function($) {
 
         // Observer pour les vidéos
         $('video').on('canplaythrough', checkAllResourcesLoaded);
-
-        // Observer pour les fichiers audio
-        $('audio').on('canplaythrough', checkAllResourcesLoaded);
 
         // Observer pour les feuilles de style
         $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
