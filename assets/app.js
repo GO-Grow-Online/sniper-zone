@@ -126,7 +126,7 @@ jQuery(function($) {
 
                     mediaRecorder.start();
 
-                    video.on('ended', function() {
+                    $('#videoPlayer #video').on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
