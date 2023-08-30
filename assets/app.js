@@ -14,22 +14,26 @@ jQuery(function($) {
                 var video_url = $(this).attr('data-src');
                 var $source = $(this);
 
-                $.get(video_url, function(data) {
+                var xhr = $.get(video_url, function(data) {
                     $source.attr('src', video_url);
                     video[0].load();
-                    video.on('progress', function(event) {
+                });
+    
+                xhr.onprogress = function(event) {
+                    if (event.lengthComputable) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
                         console.log('Chargement en cours : ' + progress + '%');
-                    });
-                    video.on('canplaythrough', function() {
-                        loadedSources++;
-
-                        if (loadedSources === totalSources) {
-                            $('body').removeClass('loading');
-                            console.log('Toutes les vidéos ont été chargées.');
-                        }
-                    });
-                });
+                    }
+                };
+    
+                xhr.onload = function() {
+                    loadedSources++;
+    
+                    if (loadedSources === totalSources) {
+                        $('body').removeClass('loading');
+                        console.log('Toutes les vidéos ont été chargées.');
+                    }
+                };
             });
         }
     }
