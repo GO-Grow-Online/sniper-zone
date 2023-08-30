@@ -11,7 +11,7 @@ jQuery(function($) {
 
         if (video.length) {
             sources.each(function() {
-                var video_url = $(this).attr('src');
+                var video_url = $(this).attr('data-src');
         
                 $.ajax({
                     url: video_url,
