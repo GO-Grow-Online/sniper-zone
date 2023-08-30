@@ -12,7 +12,6 @@ jQuery(function($) {
         if (video.length) {
             sources.each(function() {
                 var video_url = $(this).attr('data-src');
-                var $source = $(this);
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', video_url, true);
@@ -21,8 +20,8 @@ jQuery(function($) {
                 xhr.onprogress = function(event) {
                     if (event.lengthComputable) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
-                        console.log(event.loaded / event.total);
                         console.log('Chargement en cours : ' + progress + '%');
+                        $('.loadingScreen-indicator-value').text(progress);
                     }
                 };
 
