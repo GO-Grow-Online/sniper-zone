@@ -96,6 +96,8 @@ section.current {
   background-color: #000;
 }
 .loadingScreen-indicator svg {
+  width: 5vw;
+  height: 5vw;
   animation-name: loading;
   animation-iteration-count: infinite;
   animation-duration: 2s;
