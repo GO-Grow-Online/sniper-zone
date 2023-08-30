@@ -5,7 +5,7 @@ jQuery(function($) {
     loadPage();
 
     function loadPage() {
-        var totalResources = $('img, video, link[rel="stylesheet"], script').length;
+        var totalResources = $('video, link[rel="stylesheet"], script').length;
         var loadedResources = 0;
     
         function updateProgress() {
@@ -25,7 +25,7 @@ jQuery(function($) {
             updateProgress();
         }
     
-        $('img').on('load', checkAllResourcesLoaded);
+        // $('img').on('load', checkAllResourcesLoaded);
         $('video').on('canplaythrough', checkAllResourcesLoaded);
         $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
         $('script').on('load', checkAllResourcesLoaded);
