@@ -2,45 +2,7 @@ jQuery(function($) {
     // video();
     select_lang();
     // loadApp();
-    loadPage();
-
-    function loadPage() {
-        var totalResources = $('video').length;
-        var loadedResources = 0;
     
-        function updateProgress() {
-            var progress = Math.floor((loadedResources / totalResources) * 100);
-            console.log('Chargement de la page en cours : ' + progress + '%');
-            $('.loadingScreen-indicator-value').text(progress);
-        }
-    
-        function checkAllResourcesLoaded() {
-            loadedResources++;
-
-            console.log(loadedResources);
-    
-            if (loadedResources === totalResources) {
-                $('body').removeClass('loading');
-                console.log('Tous les éléments de la page ont été chargés.');
-            }
-    
-            updateProgress();
-        }
-    
-        // $('img').on('load', checkAllResourcesLoaded);
-        $('video').on('canplaythrough', checkAllResourcesLoaded);
-        // $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
-        // $('script').on('load', checkAllResourcesLoaded);
-    
-        // Observer pour les éléments qui ne déclenchent pas d'événement de chargement
-        setTimeout(function() {
-            checkAllResourcesLoaded();
-        }, 1000); // Vérification finale après 1 seconde
-    
-        // Affichage initial de la progression
-        updateProgress();        
-    }
-
     function loadApp() {
         var video = $('#video');
         var sources = video.find('source');
