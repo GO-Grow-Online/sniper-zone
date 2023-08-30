@@ -4,6 +4,10 @@ require_once 'assets/PHPMailer-master/src/Exception.php';
 require_once 'assets/PHPMailer-master/src/PHPMailer.php';
 require_once 'assets/PHPMailer-master/src/SMTP.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
 // Vérification du formulaire soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES['video'])) {
@@ -28,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Subject = 'Video';
             $mail->Body = 'message';
             
-            // Ajout de la pièce jointe (la vidéo)
             $mail->addAttachment($video['tmp_name'], $video['name']);
 
             if ($mail->send()) {
