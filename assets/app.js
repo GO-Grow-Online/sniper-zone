@@ -119,6 +119,7 @@ jQuery(function($) {
                                 console.log('Vidéo envoyée avec succès');
                             },
                             error: function(response) {
+                                console.log(response);
                                 console.error('Erreur lors de l\'envoi de la vidéo', response.error);
                             }
                         });
