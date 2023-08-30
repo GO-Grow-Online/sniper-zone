@@ -5,7 +5,7 @@ jQuery(function($) {
     loadPage();
 
     function loadPage() {
-        var totalResources = $('video, link[rel="stylesheet"], script').length;
+        var totalResources = $('video, script').length;
         var loadedResources = 0;
     
         function updateProgress() {
