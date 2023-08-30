@@ -1,7 +1,7 @@
 jQuery(function($) {
     // video();
     select_lang();
-    // loadApp();
+    loadApp();
 
     function loadApp() {
         var video = $('#video');
@@ -12,7 +12,7 @@ jQuery(function($) {
         if (video.length) {
             sources.each(function() {
                 let source = $(this);
-                var video_url = $(this).attr('data-file');
+                var video_url = $(this).attr('data-src');
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', video_url, true);
