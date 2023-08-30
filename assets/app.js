@@ -21,6 +21,7 @@ jQuery(function($) {
                 xhr.onprogress = function(event) {
                     if (event.lengthComputable) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
+                        console.log(event.loaded / event.total);
                         console.log('Chargement en cours : ' + progress + '%');
                     }
                 };
