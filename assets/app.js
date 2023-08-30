@@ -5,7 +5,7 @@ jQuery(function($) {
     loadPage();
 
     function loadPage() {
-        var totalResources = $('video, script').length;
+        var totalResources = $('video').length;
         var loadedResources = 0;
     
         function updateProgress() {
@@ -16,6 +16,8 @@ jQuery(function($) {
     
         function checkAllResourcesLoaded() {
             loadedResources++;
+
+            console.log(loadedResources);
     
             if (loadedResources === totalResources) {
                 $('body').removeClass('loading');
@@ -27,8 +29,8 @@ jQuery(function($) {
     
         // $('img').on('load', checkAllResourcesLoaded);
         $('video').on('canplaythrough', checkAllResourcesLoaded);
-        $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
-        $('script').on('load', checkAllResourcesLoaded);
+        // $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
+        // $('script').on('load', checkAllResourcesLoaded);
     
         // Observer pour les éléments qui ne déclenchent pas d'événement de chargement
         setTimeout(function() {
