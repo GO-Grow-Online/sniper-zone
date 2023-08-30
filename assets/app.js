@@ -2,7 +2,7 @@ jQuery(function($) {
     // video();
     select_lang();
     // loadApp();
-    
+
     function loadApp() {
         var video = $('#video');
         var sources = video.find('source');
@@ -100,14 +100,14 @@ jQuery(function($) {
                     mediaRecorder.onstop = function() {
                         var blob = new Blob(recordedChunks, { type: 'video/webm' });
                         var formData = new FormData();
-                        // formData.append('video', blob, 'video.webm');
-                        // formData.append('video', blob, 'video.webm');
-                        formData.append('message', "Message test pour voir si l'envoie fonctionne.")
+                        formData.append('video', blob, 'proof.mp4');
+                        formData.append('message', "Message avec la vidéo attachée.")
 
                         console.log(formData, blob);
                         
-                        /*
+                        
                         // Send video in ajax form
+                        
                         $.ajax({
                             type: 'POST',
                             url: 'send_mail.php',
@@ -122,15 +122,18 @@ jQuery(function($) {
                                 console.error('Erreur lors de l\'envoi de la vidéo', response.error);
                             }
                         });
-                        */
                     };
 
                     mediaRecorder.start();
 
-                    $('#stopRec').click(function() {
+                    video.on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
+                    });
+
+                    $('#stopRec').click(function() {
+                        
                     });
             
                 }, errorCallback);
