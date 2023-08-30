@@ -56,6 +56,10 @@ section {
 }
 
 .loadingScreen {
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s opacity ease;
+
     position: absolute;
     top: 0;
     left: 0;
@@ -73,6 +77,7 @@ section {
 
         svg {
             animation-name: loading;
+            animation-iteration-count: infinite;
             animation-duration: 2s;
             animation-timing-function: steps(8);
         }
@@ -81,4 +86,8 @@ section {
 
         }
     }
+}
+
+body.loading .loadingScreen {
+    opacity: 1;
 }
