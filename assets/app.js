@@ -56,7 +56,7 @@ jQuery(function($) {
 
             // Load video in right language
             let video = $('#videoPlayer #video')
-            video.find('source').attr('src', "assets/medias/video/briefing-" + lang + ".mp4");
+            video.find('source').attr('src', "briefing-" + lang + ".php");
             video[0].load();
             video[0].play();
             stepChange('videoPlayer');
