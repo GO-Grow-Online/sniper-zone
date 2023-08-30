@@ -1,7 +1,7 @@
 jQuery(function($) {
     // video();
     select_lang();
-    loadApp();
+    // loadApp();
 
     function loadApp() {
         var video = $('#video');
@@ -11,34 +11,31 @@ jQuery(function($) {
 
         if (video.length) {
             sources.each(function() {
-                let source = $(this);
-                var video_url = $(this).attr('data-src');
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', video_url, true);
-                xhr.responseType = 'blob';
-
-                
-                // Get and display current download progress
-                xhr.onprogress = function(event) {
-                    if (event.lengthComputable) {
-                        var progress = Math.floor((event.loaded / event.total) * 100);
-                        $('.loadingScreen-indicator-value').text(progress);
+                var video_url = $(this).attr('src');
+        
+                $.ajax({
+                    url: video_url,
+                    cache: true, // Indiquer que la mise en cache doit être respectée
+                    xhr: function() {
+                        var xhr = new XMLHttpRequest();
+                        xhr.responseType = 'blob';
+                        return xhr;
+                    },
+                    progress: function(event) {
+                        if (event.lengthComputable) {
+                            var progress = Math.floor((event.loaded / event.total) * 100);
+                            $('.loadingScreen-indicator-value').text(progress);
+                        }
+                    },
+                    success: function() {
+                        loadedSources++;
+        
+                        if (loadedSources === totalSources) {
+                            $('body').removeClass('loading');
+                            console.log('Toutes les vidéos ont été chargées.');
+                        }
                     }
-                };
-
-                // Hide loading screen
-                xhr.onload = function() {
-                    loadedSources++;
-
-                    if (loadedSources === totalSources) {
-                        source.attr('src', video_url);
-                        $('body').removeClass('loading');
-                        console.log('Toutes les vidéos ont été chargées.');
-                    }
-                };
-
-                xhr.send();
+                });
             });
         }
     }
