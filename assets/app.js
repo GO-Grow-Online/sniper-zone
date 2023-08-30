@@ -13,32 +13,32 @@ jQuery(function($) {
             sources.each(function() {
                 let source = $(this);
                 var video_url = $(this).attr('data-src');
-        
-                $.ajax({
-                    url: video_url,
-                    cache: true,
-                    xhr: function() {
-                        var xhr = new XMLHttpRequest();
-                        xhr.responseType = 'blob';
-                        return xhr;
-                    },
-                    progress: function(event) {
-                        if (event.lengthComputable) {
-                            var progress = Math.floor((event.loaded / event.total) * 100);
-                            $('.loadingScreen-indicator-value').text(progress);
-                        }
-                    },
-                    success: function() {
-                        loadedSources++;
 
-                        source.attr('src', source.attr('data-src'));
-        
-                        if (loadedSources === totalSources) {
-                            $('body').removeClass('loading');
-                            console.log('Toutes les vidéos ont été chargées.');
-                        }
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', video_url, true);
+                xhr.responseType = 'blob';
+
+                
+                // Get and display current download progress
+                xhr.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        var progress = Math.floor((event.loaded / event.total) * 100);
+                        $('.loadingScreen-indicator-value').text(progress);
                     }
-                });
+                };
+
+                // Hide loading screen
+                xhr.onload = function() {
+                    loadedSources++;
+
+                    if (loadedSources === totalSources) {
+                        source.attr('src', video_url);
+                        $('body').removeClass('loading');
+                        console.log('Toutes les vidéos ont été chargées.');
+                    }
+                };
+
+                xhr.send();
             });
         }
     }
