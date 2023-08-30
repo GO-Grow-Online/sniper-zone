@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+}
+
+img {
+  display: block;
+  margin: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+button, input[type=submit] {
+  font-family: inherit;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+ol, ul, dl {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img, video {
+  width: 100%;
+}
+
+body {
+  background-color: #0f0f0f;
+  color: #fff;
+  font-size: 4vw;
+}
+
+section {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  padding: 5vw;
+  display: none;
+}
+section.current {
+  display: flex;
+}
+
+.btn--lang {
+  color: #fff;
+}
+.btn--lang img {
+  border-radius: 10px;
+  margin-bottom: 2vw;
+}
+.btn--lang span {
+  font-size: 4vw;
+}
+
+#selectLang .languages {
+  display: grid;
+  grid-template-columns: 20vw 20vw;
+  grid-template-rows: 12vw;
+  gap: 10vw;
+}
+#videoPlayer {
+  justify-content: space-between;
+}
+
+/*# sourceMappingURL=style.css.map */
