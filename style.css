@@ -43,7 +43,7 @@ img, video {
 }
 
 body {
-  background-color: #0f0f0f;
+  background-color: #000;
   color: #fff;
   font-size: 4vw;
 }
@@ -85,6 +85,7 @@ section.current {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: #000;
 }
 .loadingScreen-indicator svg {
   animation-name: loading;

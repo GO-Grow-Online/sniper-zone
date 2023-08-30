@@ -1,3 +1,8 @@
+$dark : #000;
+$white : #fff;
+
+
+
 * {
     box-sizing: border-box;
 }
@@ -7,8 +12,8 @@ img, video{
 }
 
 body {
-    background-color: #0f0f0f;
-    color: #fff;
+    background-color: $dark;
+    color: $white;
 
     font-size: 4vw;
 }
@@ -33,7 +38,7 @@ section {
 
 .btn--lang {
 
-    color: #fff;
+    color: $white;
 
     img {
         border-radius: 10px;
@@ -55,6 +60,8 @@ section {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    background-color: $dark;
 
     &-indicator {
 
