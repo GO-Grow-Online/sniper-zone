@@ -16,7 +16,7 @@ jQuery(function($) {
         
                 $.ajax({
                     url: video_url,
-                    cache: true, // Indiquer que la mise en cache doit être respectée
+                    cache: true,
                     xhr: function() {
                         var xhr = new XMLHttpRequest();
                         xhr.responseType = 'blob';
