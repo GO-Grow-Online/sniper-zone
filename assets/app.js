@@ -17,6 +17,7 @@ jQuery(function($) {
                 xhr.open('GET', video_url, true);
                 xhr.responseType = 'blob';
 
+                // Get and display current download progress
                 xhr.onprogress = function(event) {
                     if (event.lengthComputable) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
@@ -24,6 +25,7 @@ jQuery(function($) {
                     }
                 };
 
+                // Hide loading screen
                 xhr.onload = function() {
                     loadedSources++;
 
