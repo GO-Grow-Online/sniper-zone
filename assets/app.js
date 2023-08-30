@@ -14,27 +14,27 @@ jQuery(function($) {
                 var video_url = $(this).attr('data-src');
                 var $source = $(this);
 
-                var xhr = $.get(video_url, function(data) {
-                    $source.attr('src', video_url);
-                    video[0].load();
-                });
-    
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', video_url, true);
+                xhr.responseType = 'blob';
+
                 xhr.onprogress = function(event) {
                     if (event.lengthComputable) {
+                        var progress = Math.floor((event.loaded / event.total) * 100);
+                        console.log('Chargement en cours : ' + progress + '%');
                     }
-
-                    var progress = Math.floor((event.loaded / event.total) * 100);
-                    console.log('Chargement en cours : ' + progress + '%');
                 };
-    
+
                 xhr.onload = function() {
                     loadedSources++;
-    
+
                     if (loadedSources === totalSources) {
                         $('body').removeClass('loading');
                         console.log('Toutes les vidéos ont été chargées.');
                     }
                 };
+
+                xhr.send();
             });
         }
     }
