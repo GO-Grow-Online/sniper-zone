@@ -45,6 +45,7 @@ img, video {
 body {
   background-color: #000;
   color: #fff;
+  font-family: "Urbanist";
   font-size: 4vw;
 }
 
@@ -94,6 +95,9 @@ section.current {
   justify-content: center;
   flex-direction: column;
   background-color: #000;
+}
+.loadingScreen-indicator {
+  text-align: center;
 }
 .loadingScreen-indicator svg {
   width: 10vw;

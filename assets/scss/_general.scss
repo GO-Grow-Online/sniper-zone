@@ -15,6 +15,7 @@ body {
     background-color: $dark;
     color: $white;
 
+    font-family: 'Urbanist';
     font-size: 4vw;
 }
 
@@ -74,6 +75,8 @@ section {
     background-color: $dark;
 
     &-indicator {
+
+        text-align: center;
 
         svg {
             width: 10vw;

@@ -20,7 +20,6 @@ jQuery(function($) {
                 xhr.onprogress = function(event) {
                     if (event.lengthComputable) {
                         var progress = Math.floor((event.loaded / event.total) * 100);
-                        // console.log('Chargement en cours : ' + progress + '%');
                         $('.loadingScreen-indicator-value').text(progress);
                     }
                 };
