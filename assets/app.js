@@ -1,6 +1,38 @@
 jQuery(function($) {
     // video();
     select_lang();
+    loadApp();
+
+    function loadApp() {
+        var video = $('#video');
+        var sources = video.find('source');
+        var totalSources = sources.length;
+        var loadedSources = 0;
+
+        if (video.length) {
+            sources.each(function() {
+                var video_url = $(this).attr('data-src');
+                var $source = $(this);
+
+                $.get(video_url, function(data) {
+                    $source.attr('src', video_url);
+                    video[0].load();
+                    video.on('progress', function(event) {
+                        var progress = Math.floor((event.loaded / event.total) * 100);
+                        console.log('Chargement en cours : ' + progress + '%');
+                    });
+                    video.on('canplaythrough', function() {
+                        loadedSources++;
+
+                        if (loadedSources === totalSources) {
+                            $('body').removeClass('loading');
+                            console.log('Toutes les vidéos ont été chargées.');
+                        }
+                    });
+                });
+            });
+        }
+    }
 
     function stepChange(nextStep) {
         var previousStep = $('section.current');
@@ -8,7 +40,6 @@ jQuery(function($) {
 
         $('section#' + nextStep).addClass('current'); 
     }
-
 
     function video() {
     }
@@ -64,8 +95,9 @@ jQuery(function($) {
                         // formData.append('video', blob, 'video.webm');
                         formData.append('message', "Message test pour voir si l'envoie fonctionne.")
 
-                        console.log(formData);
-        
+                        console.log(formData, blob);
+                        
+                        /*
                         // Send video in ajax form
                         $.ajax({
                             type: 'POST',
@@ -81,6 +113,7 @@ jQuery(function($) {
                                 console.error('Erreur lors de l\'envoi de la vidéo', response.error);
                             }
                         });
+                        */
                     };
 
                     mediaRecorder.start();

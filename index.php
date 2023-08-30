@@ -8,7 +8,11 @@
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="loading">
+
+    <div class="loadingScreen">
+
+    </div>
 
     <main>
 
@@ -44,9 +48,12 @@
         <section id="videoPlayer">
             <button id="stopRec">stopRec</button>
             <video autoplay id="videoPreview"></video>
-            <video mute id="video" preload="auto">
+            <video id="video" preload="auto">
                 <!--source src="video.php" type="video/mp4"-->
-                <source src="..." type="video/mp4">
+                <source src="..." data-src="briefing-fr.php" type="video/mp4">
+                <!-- <source src="..." data-src="briefing-de.php" type="video/mp4"> -->
+                <!-- <source src="..." data-src="briefing-en.php" type="video/mp4"> -->
+                <!-- <source src="..." data-src="briefing-nl.php" type="video/mp4"> -->
                 
                 Votre navigateur ne supporte pas la lecture de vidéos.
             </video>
