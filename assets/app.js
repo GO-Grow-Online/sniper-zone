@@ -11,7 +11,8 @@ jQuery(function($) {
 
         if (video.length) {
             sources.each(function() {
-                var video_url = $(this).attr('src');
+                let source = $(this);
+                var video_url = $(this).attr('data-src');
         
                 $.ajax({
                     url: video_url,
@@ -29,6 +30,8 @@ jQuery(function($) {
                     },
                     success: function() {
                         loadedSources++;
+
+                        source.attr('src', source.attr('data-src'));
         
                         if (loadedSources === totalSources) {
                             $('body').removeClass('loading');
