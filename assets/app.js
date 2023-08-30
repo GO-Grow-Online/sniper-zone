@@ -78,12 +78,11 @@ jQuery(function($) {
                 navigator.getUserMedia({video: true}, function(stream) {
                     var video = document.querySelector('#videoPreview');
                     
-                    // video.src = window.URL.createObjectURL(stream);
                     video.srcObject = stream;
                 
                     // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
                     video.onloadedmetadata = function(e) {
-                        console.log('onloadedmetadata');
+                        // console.log('onloadedmetadata');
                     };
 
                     var mediaRecorder = new MediaRecorder(stream);
@@ -96,7 +95,7 @@ jQuery(function($) {
                     };
             
                     mediaRecorder.onstop = function() {
-                        var blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        var blob = new Blob(recordedChunks, { type: 'video/mp4' });
                         var formData = new FormData();
                         formData.append('video', blob, 'proof.mp4');
                         formData.append('message', "Message avec la vidéo attachée.")
@@ -114,11 +113,9 @@ jQuery(function($) {
                             processData: false,
                             success: function(response) {
                                 console.log(response);
-                                console.log('Vidéo envoyée avec succès');
                             },
                             error: function(response) {
                                 console.log(response);
-                                console.error('Erreur lors de l\'envoi de la vidéo', response.error);
                             }
                         });
                     };

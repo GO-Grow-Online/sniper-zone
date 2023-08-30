@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Mail content
             $mail->Subject = 'Video';
-            $mail->Body = 'message';
+            $mail->Body = $_POST['message'];
             
             $mail->addAttachment($video['tmp_name'], $video['name']);
 
