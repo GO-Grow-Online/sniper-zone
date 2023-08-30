@@ -8,7 +8,7 @@
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="loading">
+<body>
 
     <div class="loadingScreen">
         <div class="loadingScreen-indicator">
