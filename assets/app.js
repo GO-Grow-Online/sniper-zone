@@ -1,7 +1,7 @@
 jQuery(function($) {
     // video();
     select_lang();
-    // loadApp();
+    loadApp();
 
     function loadApp() {
         var video = $('#video');
