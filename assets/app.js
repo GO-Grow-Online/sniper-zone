@@ -36,10 +36,10 @@ jQuery(function($) {
         $('script').on('load', checkAllResourcesLoaded);
 
         // Observer pour les éléments qui ne déclenchent pas d'événement de chargement
-        setTimeout(function() {
+        /*setTimeout(function() {
             checkAllResourcesLoaded();
         }, 1000); // Vérification finale après 1 seconde
-
+            */
         // Affichage initial de la progression
         updateProgress();
     }
