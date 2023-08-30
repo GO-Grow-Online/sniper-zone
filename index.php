@@ -54,7 +54,7 @@
             <video autoplay id="videoPreview"></video>
             <video id="video" preload="auto">
                 <!--source src="video.php" type="video/mp4"-->
-                <source src="briefing-fr.php" data-file="briefing-fr.php" type="video/mp4">
+                <source src="briefing-fr.php" data-file="assets/medias/video/briefing-fr.mp4" type="video/mp4">
                 <!-- <source src="..." data-src="briefing-de.php" type="video/mp4"> -->
                 <!-- <source src="..." data-src="briefing-en.php" type="video/mp4"> -->
                 <!-- <source src="..." data-src="briefing-nl.php" type="video/mp4"> -->
