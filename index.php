@@ -52,7 +52,7 @@
         <section id="videoPlayer">
             <button id="stopRec">stopRec</button>
             <video autoplay id="videoPreview"></video>
-            <video id="video" pause preload="auto">
+            <video id="video" preload="auto">
                 <!--source src="video.php" type="video/mp4"-->
                 <source src="briefing-fr.php" type="video/mp4">
                 <!-- <source src="..." data-src="briefing-de.php" type="video/mp4"> -->
