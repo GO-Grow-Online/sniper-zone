@@ -11,7 +11,7 @@ jQuery(function($) {
 
         if (video.length) {
             sources.each(function() {
-                var video_url = $(this).attr('data-file');
+                var video_url = $(this).attr('src');
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', video_url, true);
