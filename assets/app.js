@@ -1,7 +1,42 @@
 jQuery(function($) {
     // video();
     select_lang();
-    loadApp();
+    // loadApp();
+    loadPage();
+
+    function loadPage() {
+        var totalResources = $('img, video, link[rel="stylesheet"], script').length;
+        var loadedResources = 0;
+    
+        function updateProgress() {
+            var progress = Math.floor((loadedResources / totalResources) * 100);
+            console.log('Chargement de la page en cours : ' + progress + '%');
+        }
+    
+        function checkAllResourcesLoaded() {
+            loadedResources++;
+    
+            if (loadedResources === totalResources) {
+                $('body').removeClass('loading');
+                console.log('Tous les éléments de la page ont été chargés.');
+            }
+    
+            updateProgress();
+        }
+    
+        $('img').on('load', checkAllResourcesLoaded);
+        $('video').on('canplaythrough', checkAllResourcesLoaded);
+        $('link[rel="stylesheet"]').on('load', checkAllResourcesLoaded);
+        $('script').on('load', checkAllResourcesLoaded);
+    
+        // Observer pour les éléments qui ne déclenchent pas d'événement de chargement
+        setTimeout(function() {
+            checkAllResourcesLoaded();
+        }, 1000); // Vérification finale après 1 seconde
+    
+        // Affichage initial de la progression
+        updateProgress();        
+    }
 
     function loadApp() {
         var video = $('#video');
@@ -11,31 +46,34 @@ jQuery(function($) {
 
         if (video.length) {
             sources.each(function() {
+                let source = $(this);
                 var video_url = $(this).attr('data-src');
-        
-                $.ajax({
-                    url: video_url,
-                    cache: true, // Indiquer que la mise en cache doit être respectée
-                    xhr: function() {
-                        var xhr = new XMLHttpRequest();
-                        xhr.responseType = 'blob';
-                        return xhr;
-                    },
-                    progress: function(event) {
-                        if (event.lengthComputable) {
-                            var progress = Math.floor((event.loaded / event.total) * 100);
-                            $('.loadingScreen-indicator-value').text(progress);
-                        }
-                    },
-                    success: function() {
-                        loadedSources++;
-        
-                        if (loadedSources === totalSources) {
-                            $('body').removeClass('loading');
-                            console.log('Toutes les vidéos ont été chargées.');
-                        }
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', video_url, true);
+                xhr.responseType = 'blob';
+
+                
+                // Get and display current download progress
+                xhr.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        var progress = Math.floor((event.loaded / event.total) * 100);
+                        $('.loadingScreen-indicator-value').text(progress);
                     }
-                });
+                };
+
+                // Hide loading screen
+                xhr.onload = function() {
+                    loadedSources++;
+
+                    if (loadedSources === totalSources) {
+                        source.attr('src', video_url);
+                        $('body').removeClass('loading');
+                        console.log('Toutes les vidéos ont été chargées.');
+                    }
+                };
+
+                xhr.send();
             });
         }
     }
