@@ -1,7 +1,11 @@
 @import 'reset';
 @import 'general';
 @import 'type';
+@import 'registrations_page';
 
 // Steps
 @import 'steps/selectLang';
-@import 'steps/playVideo';
+@import 'steps/briefing';
+@import 'steps/email';
+@import 'steps/takePicture';
+@import 'steps/askPicture';

@@ -1,0 +1,25 @@
+#selectLang {
+    .languages {
+        display: grid;
+        grid-template-columns: 20vw 20vw;
+        grid-template-rows: 12vw;
+        gap: 20vw 15vw;
+
+        & > li {
+
+            .btn--lang {
+
+                color: $white;
+
+                img {
+                    border-radius: $radius;
+                    margin-bottom: 2vw;
+                }
+
+                span {
+                    font-size: 4vw;
+                }
+            }
+        }
+    }
+}

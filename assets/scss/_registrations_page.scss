@@ -1,0 +1,52 @@
+body.clients {
+
+    &::before, &::after {
+        content: none;
+    }
+
+    background-color: darken($dark, 5%);
+
+    padding: 5vw;
+    font-size: 3vw;
+
+    .table {
+
+        width: 100%;
+
+        &-heading {
+            display: none;
+        }
+
+        svg {
+            width: 4vw;
+            height: 4vw;
+            margin-bottom: -1.25vw;
+            margin-right: 2vw;
+        }   
+
+        &-row {
+
+            display: grid;
+            margin-bottom: 5vw;
+
+            & > td:not(.table-row-date) {
+                padding: 2vw 2.5vw;
+                background-color: $dark;
+            }
+
+            &-id { display: none; }
+            &-date {
+
+            }
+
+            &-email {
+                border-radius: $radius $radius 0 0;
+            }
+
+            &-video {
+                a { display: block; width: 100%; }
+                border-radius: 0 0 $radius $radius;
+            }
+        }
+    }
+}

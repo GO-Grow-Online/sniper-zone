@@ -1,0 +1,72 @@
+#email {
+
+    .email {
+        &-form {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            label {
+                display: none;
+            }
+
+            input {
+                border-radius: $radius;
+                width: 100%;
+                padding: $card-p;
+                font-size: 4vw;
+                background: lighten($dark, 10%);
+            }
+
+            &-submit {
+                margin-top: 5vw;
+            }
+
+            &-msg {
+            }
+
+            @keyframes shake {
+                0% { background: lighten($dark, 10%); transform: translateX(0); }
+                33% { background: $failed; transform: translateX(-2vw); }
+                66% { background: $failed; transform: translateX(3vw); }
+                100% { background: lighten($dark, 10%); transform: translateX(0); }
+            }
+
+            @keyframes valid {
+                0% { background: lighten($dark, 10%); transform: rotate(0); }
+                50% { background: $success; }
+                100% { background: lighten($dark, 10%); transform: rotate(360deg); }
+            }
+
+            &.email-form {
+
+                &--empty {
+                    .email-form-msg--empty {
+                        opacity: 1;
+                        transform: inherit;
+                    }
+                }
+                
+                &--error {
+                    .email-form-msg--error {
+                        opacity: 1;
+                        transform: inherit;
+                    }
+                }
+
+                &--valid {
+                    .email-form-submit {
+                        animation: valid 0.3s ease-in;
+                    }
+                }
+
+                &--empty, &--error {
+                    .email-form-submit {
+                        animation: shake 0.3s ease-in;
+                    }
+                }
+            }
+        }
+    }
+}
