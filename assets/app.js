@@ -59,6 +59,19 @@ jQuery(function($) {
             });
         }
     }
+    
+    function stepChange(nextStep) {
+        var previousStep = $('section.current');
+        previousStep.removeClass('current');
+
+        previousStepId = previousStep.attr('id');
+
+        $('section#' + nextStep).addClass('current'); 
+        
+        $('.btn--previous').on('click', function() {
+            stepChange(previousStepId);
+        });
+    }
 
     function delete_client() {
         $('.btn--deleteClient').on('click', function() {
@@ -84,65 +97,6 @@ jQuery(function($) {
                     }
                 });
             });    
-        });
-    }
-
-    function send_form() {
-
-        popup('form-sending', 15000, $('#email .email-form input'));
-
-        var mail_message_fr = "<h1>Merci pour votre visite chez Sniper Zone !</h1><br/><p>Cher client, merci d'être venu chez Sniper Zone. En pièce jointe, vous trouverez une vidéo prouvant votre prise de connaissance du règlement ainsi qu'une photo de groupe (uniquement is vous aviez sélectionné l'option lors du briefing).</p><p>Dans l'attente de vous revoir pour une autre partie !</p><p>Sniper Zone</p>";
-
-        var mail_message_de = "<h1>Vielen Dank für Ihren Besuch bei Sniper Zone!</h1><br/><p>Lieber Kunde, vielen Dank, dass Sie zu Sniper Zone gekommen sind. Im Anhang finden Sie ein Video, das Ihre Kenntnis der Regeln bestätigt, sowie ein Gruppenfoto (nur, wenn Sie die Option während der Einweisung ausgewählt haben).</p><p>Wir freuen uns darauf, Sie wieder für eine weitere Runde zu sehen!</p><p>Sniper Zone</p>";
-
-        var mail_message_en = "<h1>Thank you for visiting Sniper Zone!</h1><br/><p>Dear customer, thank you for coming to Sniper Zone. Attached, you will find a video confirming your acknowledgment of the rules, as well as a group photo (only if you selected the option during the briefing).</p><p>We look forward to seeing you again for another game!</p><p>Sniper Zone</p>";
-
-        var mail_message_nl = "<h1>Bedankt voor uw bezoek aan Sniper Zone!</h1><br/><p>Beste klant, bedankt dat u bij Sniper Zone bent geweest. In de bijlage vindt u een video die uw kennis van de regels bevestigt, evenals een groepsfoto (alleen als u de optie tijdens de briefing hebt geselecteerd).</p><p>We kijken ernaar uit om u weer te zien voor een volgend spel!</p><p>Sniper Zone</p>";
-
-        var formData = new FormData();
-        formData.append('video', video_to_send, 'proof.webm');
-
-        if(group_picture_to_send !== null) {
-            formData.append('image', group_picture_to_send, 'captured_image.png');
-        }
-
-        if(selected_lang == "fr") {
-            formData.append('message', mail_message_fr);
-
-        }else if (selected_lang == "de") {
-            formData.append('message', mail_message_de);
-            
-        }else if (selected_lang == "en") {
-            formData.append('message', mail_message_en);
-            
-        }else if (selected_lang == "nl") {
-            formData.append('message', mail_message_nl);
-        }
-        formData.append('customer_email', customer_email)
-        
-        // Send video in ajax form
-        
-        $.ajax({
-            type: 'POST',
-            url: 'send_mail.php',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-
-                $('#email .email-form input').trigger('click');
-                popup('succes', 7000);
-                setTimeout(() => {
-                    location.reload();
-                }, 7000);
-            },
-            error: function(response) {
-                $('#email .email-form input').trigger('click');
-                popup('succes', 10000);
-                setTimeout(() => {
-                    location.reload();
-                }, 10000);
-            }
         });
     }
 
@@ -179,32 +133,19 @@ jQuery(function($) {
         }
     }
 
-    function step_ask_mail() {
 
-        var form = $('#email .email-form');
-        var email_field = form.find('input');
+    
+    function step_select_lang() {
+        $('#selectLang .btn--lang').on('click', function() {
+            let lang = $(this).attr('data-lang');
+            $('body').attr('data-lang', lang);
+            $('html').attr('lang', lang);
 
-        form.find('.email-form-submit').on('click', function() {
+            selected_lang = lang;
 
-            if (email_field.val() == "") {
-                popup("form-empty", 7000, email_field);
-            }
-
-            // Check if e-mail is valid
-            if (email_field.val()) {
-                var is_email_valid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email_field.val());
-                if(!is_email_valid) {
-                    popup("form-error", 7000, email_field);
-
-                // If e-mail is valid store it 
-                }else {
-                    customer_email = email_field.val();
-                    popup("form-succes", 5000, email_field);
-                    send_form();
-                }
-            }
+            // Load video in right language
+            stepChange('askPicture');
         });
-            
     }
 
     function step_ask_picture() {
@@ -295,19 +236,6 @@ jQuery(function($) {
         });
     }
 
-    function stepChange(nextStep) {
-        var previousStep = $('section.current');
-        previousStep.removeClass('current');
-
-        previousStepId = previousStep.attr('id');
-
-        $('section#' + nextStep).addClass('current'); 
-        
-        $('.btn--previous').on('click', function() {
-            stepChange(previousStepId);
-        });
-    }
-
     function step_briefing() {
 
         stepChange('briefing');
@@ -362,7 +290,6 @@ jQuery(function($) {
                         video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
                         
                         stepChange('email');
-                        // stepClose();
                     };
     
                     mediaRecorder.start();
@@ -381,16 +308,90 @@ jQuery(function($) {
         }
     }
 
-    function step_select_lang() {
-        $('#selectLang .btn--lang').on('click', function() {
-            let lang = $(this).attr('data-lang');
-            $('body').attr('data-lang', lang);
-            $('html').attr('lang', lang);
+    function step_ask_mail() {
 
-            selected_lang = lang;
+        var form = $('#email .email-form');
+        var email_field = form.find('input');
 
-            // Load video in right language
-            stepChange('askPicture');
+        form.find('.email-form-submit').on('click', function() {
+
+            if (email_field.val() == "") {
+                popup("form-empty", 7000, email_field);
+            }
+
+            // Check if e-mail is valid
+            if (email_field.val()) {
+                var is_email_valid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email_field.val());
+                if(!is_email_valid) {
+                    popup("form-error", 7000, email_field);
+
+                // If e-mail is valid store it 
+                }else {
+                    customer_email = email_field.val();
+                    popup("form-succes", 5000, email_field);
+                    send_form();
+                }
+            }
+        });
+            
+    }
+
+    function send_form() {
+
+        popup('form-sending', 15000, $('#email .email-form input'));
+
+        var mail_message_fr = "<h1>Merci pour votre visite chez Sniper Zone !</h1><br/><p>Cher client, merci d'être venu chez Sniper Zone. En pièce jointe, vous trouverez une vidéo prouvant votre prise de connaissance du règlement ainsi qu'une photo de groupe (uniquement is vous aviez sélectionné l'option lors du briefing).</p><p>Dans l'attente de vous revoir pour une autre partie !</p><p>Sniper Zone</p>";
+
+        var mail_message_de = "<h1>Vielen Dank für Ihren Besuch bei Sniper Zone!</h1><br/><p>Lieber Kunde, vielen Dank, dass Sie zu Sniper Zone gekommen sind. Im Anhang finden Sie ein Video, das Ihre Kenntnis der Regeln bestätigt, sowie ein Gruppenfoto (nur, wenn Sie die Option während der Einweisung ausgewählt haben).</p><p>Wir freuen uns darauf, Sie wieder für eine weitere Runde zu sehen!</p><p>Sniper Zone</p>";
+
+        var mail_message_en = "<h1>Thank you for visiting Sniper Zone!</h1><br/><p>Dear customer, thank you for coming to Sniper Zone. Attached, you will find a video confirming your acknowledgment of the rules, as well as a group photo (only if you selected the option during the briefing).</p><p>We look forward to seeing you again for another game!</p><p>Sniper Zone</p>";
+
+        var mail_message_nl = "<h1>Bedankt voor uw bezoek aan Sniper Zone!</h1><br/><p>Beste klant, bedankt dat u bij Sniper Zone bent geweest. In de bijlage vindt u een video die uw kennis van de regels bevestigt, evenals een groepsfoto (alleen als u de optie tijdens de briefing hebt geselecteerd).</p><p>We kijken ernaar uit om u weer te zien voor een volgend spel!</p><p>Sniper Zone</p>";
+
+        var formData = new FormData();
+        formData.append('video', video_to_send, 'proof.webm');
+
+        if(group_picture_to_send !== null) {
+            formData.append('image', group_picture_to_send, 'captured_image.png');
+        }
+
+        if(selected_lang == "fr") {
+            formData.append('message', mail_message_fr);
+
+        }else if (selected_lang == "de") {
+            formData.append('message', mail_message_de);
+            
+        }else if (selected_lang == "en") {
+            formData.append('message', mail_message_en);
+            
+        }else if (selected_lang == "nl") {
+            formData.append('message', mail_message_nl);
+        }
+        formData.append('customer_email', customer_email)
+        
+        // Send video in ajax form
+        
+        $.ajax({
+            type: 'POST',
+            url: 'send_mail.php',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+
+                $('#email .email-form input').trigger('click');
+                popup('succes', 7000);
+                setTimeout(() => {
+                    location.reload();
+                }, 7000);
+            },
+            error: function(response) {
+                $('#email .email-form input').trigger('click');
+                popup('succes', 10000);
+                setTimeout(() => {
+                    location.reload();
+                }, 10000);
+            }
         });
     }
 });
