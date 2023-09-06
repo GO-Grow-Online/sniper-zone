@@ -4,6 +4,7 @@ jQuery(function($) {
     step_ask_picture();
     step_ask_mail();
     step_take_picture();
+    delete_client();
     // send_form();
     // popup();
     // loadApp();
@@ -35,7 +36,6 @@ jQuery(function($) {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', video_url, true);
                 xhr.responseType = 'blob';
-
                 
                 // Get and display current download progress
                 xhr.onprogress = function(event) {
@@ -60,9 +60,34 @@ jQuery(function($) {
         }
     }
 
-    function send_form() {
+    function delete_client() {
+        $('.btn--deleteClient').on('click', function() {
+            let id = $(this).attr('data-delete');
+            let target = $(this).parent().parent();
+            var formData = new FormData();
+            formData.append('id', id);
+            
+            popup('deletion-warning', 5000, $('[data-popup="deletion-warning"] .btn'));
+            $('[data-popup="deletion-warning"] .btn--confirm').on('click', function() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'delete_client.php',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        target.slideUp(600);
+                    },
+                    error: function(response) {
+                        popup("deletion-failed");
+                        console.log(response);
+                    }
+                });
+            });    
+        });
+    }
 
-        console.log('sendForm')
+    function send_form() {
 
         popup('form-sending', 15000, $('#email .email-form input'));
 
@@ -75,9 +100,7 @@ jQuery(function($) {
         var mail_message_nl = "<h1>Bedankt voor uw bezoek aan Sniper Zone!</h1><br/><p>Beste klant, bedankt dat u bij Sniper Zone bent geweest. In de bijlage vindt u een video die uw kennis van de regels bevestigt, evenals een groepsfoto (alleen als u de optie tijdens de briefing hebt geselecteerd).</p><p>We kijken ernaar uit om u weer te zien voor een volgend spel!</p><p>Sniper Zone</p>";
 
         var formData = new FormData();
-        formData.append('video', video_to_send, 'proof.mp4');
-
-        console.log(group_picture_to_send !== null);
+        formData.append('video', video_to_send, 'proof.webm');
 
         if(group_picture_to_send !== null) {
             formData.append('image', group_picture_to_send, 'captured_image.png');
@@ -110,19 +133,15 @@ jQuery(function($) {
                 $('#email .email-form input').trigger('click');
                 popup('succes', 7000);
                 setTimeout(() => {
-                    // location.reload();
+                    location.reload();
                 }, 7000);
-
-                console.log(response);
             },
             error: function(response) {
                 $('#email .email-form input').trigger('click');
-                popup('succes', 7000);
+                popup('succes', 10000);
                 setTimeout(() => {
-                    // location.reload();
-                }, 7000);
-
-                console.log(response);
+                    location.reload();
+                }, 10000);
             }
         });
     }
@@ -195,7 +214,6 @@ jQuery(function($) {
 
         $('section#askPicture .btn--refusePic').on('click', function(){
             popup("brief-begin", 4000);
-            console.log(group_picture_to_send);
             setTimeout(() => {
                 step_briefing();
             }, 4000);
@@ -222,7 +240,7 @@ jQuery(function($) {
             var timer_btn = $(this);
             timer_btn.addClass('timerOn');
 
-            var timer_lenght = 1000;
+            var timer_lenght = 10000;
 
             // Animate a progression bar for popup
             var startTime = Date.now();
@@ -256,17 +274,13 @@ jQuery(function($) {
             updateCountdown();
         });
 
-        $('#takePicture .btn--validatePic').on('click', function() {         
+        $('#takePicture .btn--confirm').on('click', function() {         
             // Convert image into a blob to make in sendable
             canvas.toBlob(function(blob) {
                 group_picture_to_send = blob;
             }, 'image/png');
 
             $('section#takePicture').removeClass('takePicture--showResult');
-
-            // stepClose();
-
-            console.log(group_picture_to_send);
 
             popup("brief-begin", 4000);
             setTimeout(() => {
@@ -275,10 +289,9 @@ jQuery(function($) {
             }, 4000);
         });
         
-        $('#takePicture .btn--redoPic').on('click', function() {
+        $('#takePicture .btn--cancel').on('click', function() {
             capturedImage.attr('src', '');
             $('section#takePicture').removeClass('takePicture--showResult');
-            console.log(group_picture_to_send);
         });
     }
 
@@ -314,18 +327,28 @@ jQuery(function($) {
             var errorCallback = function(error) {
                 console.log('Reeeejected!', error);
             };
+
+            var constraints = {
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    frameRate: { ideal: 12 },
+                },
+            };
             
-            navigator.mediaDevices.getUserMedia({ video: true })
+            navigator.mediaDevices.getUserMedia(constraints)
                 .then(function(stream) {
                 
                     video_preview.prop('srcObject', stream);
                 
                     // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
-                    video_preview.onloadedmetadata = function(e) {
-                        // console.log('onloadedmetadata');
-                    };
+                    /* video_preview.onloadedmetadata = function(e) {
+                        console.log('onloadedmetadata');
+                    }; */
     
-                    var mediaRecorder = new MediaRecorder(stream);
+                    var mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: 'video/webm; codecs=vp9', // Specify desired video codec
+                    });
                     var recordedChunks = [];
             
                     mediaRecorder.ondataavailable = function(event) {
@@ -336,8 +359,8 @@ jQuery(function($) {
             
                     mediaRecorder.onstop = function() {
                         // Convert recorded video into a blob to make it sendable
-                        video_to_send = new Blob(recordedChunks, { type: 'video/mp4' });
-    
+                        video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
+                        
                         stepChange('email');
                         // stepClose();
                     };
@@ -348,7 +371,8 @@ jQuery(function($) {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
-                    });                })
+                    });
+                })
                 .catch(function(error) {
                     console.error('Error accessing webcam:', error);
                 });

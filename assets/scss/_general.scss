@@ -44,6 +44,9 @@ img, video{
 
 body {
 
+    // background-color: darken($dark, 2%);
+
+    
     &::after, &::before {
         content: '';
         position: absolute;
@@ -64,12 +67,18 @@ body {
         background-size: cover;
         z-index: -2;
     }
+    
 }
 
 .btn--previous {
     position: absolute;
     top: 5vw;
     left: 5vw;
+}
+
+@keyframes step-change {
+    from { transform: scale(1.1); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 section {
@@ -85,6 +94,8 @@ section {
     padding: 5vw;
 
     display: none;
+
+    animation: step-change 0.3s ease;
 
     &.current {
         display: flex;
@@ -147,13 +158,18 @@ body.loading .loadingScreen {
     border-radius: $radius;
 
     &-round {
-        width: 15vw;
-        height: 15vw;    
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 10vw;
+        height: 10vw;    
         border-radius: $radius-round;
     
         svg {
-            width: 60%;
-            height: 60%;
+            width: 40%;
+            height: 30%;
 
             &.timer-svg {
                 width: 100%;
@@ -164,6 +180,17 @@ body.loading .loadingScreen {
                 }
             }
         }
+
+        &.btn-small {
+            width: 7.5vw;
+            height: 7.5vw;
+            background-color: lighten($dark, 20%);
+            
+            svg {
+                width: 60%;
+                height: 60%;
+            }
+        }
     }
 
     &-group {
@@ -171,6 +198,19 @@ body.loading .loadingScreen {
         justify-content: center;
         flex-wrap: wrap;
         gap: $card-p;
+    }
+
+    &--settings {
+        position: absolute;
+        bottom: 5vw;
+    }
+
+    &--cancel {
+        background-color: $failed;
+    }
+
+    &--confirm {
+        background-color: $success;
     }
 }
 
@@ -187,6 +227,11 @@ $indicator-height : calc($card-p / 3);
     display: flex;
     align-items: flex-end;
     justify-content: center;
+
+    .btn-group {
+        margin-top: 5vw;
+        color: $white;
+    }
 
     &-center {
         align-items: center;

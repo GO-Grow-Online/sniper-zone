@@ -1,5 +1,11 @@
 body.clients {
 
+    .btn--previous {
+        position: relative;
+        left: inherit;
+        top: inherit;
+    }
+
     &::before, &::after {
         content: none;
     }
@@ -17,7 +23,7 @@ body.clients {
             display: none;
         }
 
-        svg {
+        &-icon {
             width: 4vw;
             height: 4vw;
             margin-bottom: -1.25vw;
@@ -26,17 +32,22 @@ body.clients {
 
         &-row {
 
+            position: relative;
             display: grid;
             margin-bottom: 5vw;
 
-            & > td:not(.table-row-date) {
+            & > td:not(.table-row-infos):not(.table-row-actions) {
                 padding: 2vw 2.5vw;
                 background-color: $dark;
             }
 
             &-id { display: none; }
-            &-date {
-
+            &-infos {
+                span {
+                    opacity: .4;
+                    font-size: 2vw;
+                    margin-left: 1vw;
+                }
             }
 
             &-email {
@@ -46,6 +57,14 @@ body.clients {
             &-video {
                 a { display: block; width: 100%; }
                 border-radius: 0 0 $radius $radius;
+            }
+
+            &-actions {
+                $size : 7.5vw;
+
+                position: absolute;
+                right: $size * 0.25;
+                top: $size * 0;
             }
         }
     }

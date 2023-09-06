@@ -92,6 +92,16 @@ body::after {
   left: 5vw;
 }
 
+@keyframes step-change {
+  from {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 section {
   text-align: center;
   align-items: center;
@@ -101,6 +111,7 @@ section {
   height: 100vh;
   padding: 5vw;
   display: none;
+  animation: step-change 0.3s ease;
 }
 section.current {
   display: flex;
@@ -150,13 +161,17 @@ body.loading .loadingScreen {
   border-radius: 1.5vw;
 }
 .btn-round {
-  width: 15vw;
-  height: 15vw;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10vw;
+  height: 10vw;
   border-radius: 1000vw;
 }
 .btn-round svg {
-  width: 60%;
-  height: 60%;
+  width: 40%;
+  height: 30%;
 }
 .btn-round svg.timer-svg {
   width: 100%;
@@ -165,11 +180,30 @@ body.loading .loadingScreen {
 .btn-round svg.timer-svg circle {
   fill: #e2651d;
 }
+.btn-round.btn-small {
+  width: 7.5vw;
+  height: 7.5vw;
+  background-color: #595659;
+}
+.btn-round.btn-small svg {
+  width: 60%;
+  height: 60%;
+}
 .btn-group {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 3vw;
+}
+.btn--settings {
+  position: absolute;
+  bottom: 5vw;
+}
+.btn--cancel {
+  background-color: #e24343;
+}
+.btn--confirm {
+  background-color: #589c51;
 }
 
 .popup {
@@ -186,6 +220,10 @@ body.loading .loadingScreen {
   opacity: 0;
   transform: translateY(5vw);
   transition: all 0.3s ease;
+}
+.popup .btn-group {
+  margin-top: 5vw;
+  color: #fff;
 }
 .popup-center {
   align-items: center;
@@ -306,6 +344,11 @@ body.clients {
   padding: 5vw;
   font-size: 3vw;
 }
+body.clients .btn--previous {
+  position: relative;
+  left: inherit;
+  top: inherit;
+}
 body.clients::before, body.clients::after {
   content: none;
 }
@@ -315,22 +358,28 @@ body.clients .table {
 body.clients .table-heading {
   display: none;
 }
-body.clients .table svg {
+body.clients .table-icon {
   width: 4vw;
   height: 4vw;
   margin-bottom: -1.25vw;
   margin-right: 2vw;
 }
 body.clients .table-row {
+  position: relative;
   display: grid;
   margin-bottom: 5vw;
 }
-body.clients .table-row > td:not(.table-row-date) {
+body.clients .table-row > td:not(.table-row-infos):not(.table-row-actions) {
   padding: 2vw 2.5vw;
   background-color: #252425;
 }
 body.clients .table-row-id {
   display: none;
+}
+body.clients .table-row-infos span {
+  opacity: 0.4;
+  font-size: 2vw;
+  margin-left: 1vw;
 }
 body.clients .table-row-email {
   border-radius: 1.5vw 1.5vw 0 0;
@@ -341,6 +390,11 @@ body.clients .table-row-video {
 body.clients .table-row-video a {
   display: block;
   width: 100%;
+}
+body.clients .table-row-actions {
+  position: absolute;
+  right: 1.875vw;
+  top: 0vw;
 }
 
 #selectLang .languages {
@@ -487,7 +541,7 @@ body.clients .table-row-video a {
   opacity: 1;
 }
 #takePicture .btn--takePicture span {
-  font-size: 7vw;
+  font-size: 5vw;
   transform: translateY(15vw);
   opacity: 0;
 }
