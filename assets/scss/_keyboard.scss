@@ -1,0 +1,130 @@
+.keyboard {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 5vw;
+    background: $dark-75;
+    user-select: none;
+    transition: opacity 0.3s ease;
+
+    pointer-events: all;
+
+    backdrop-filter: blur(1vw);
+    opacity: 1;
+
+    &-keys {
+        text-align: center;
+
+        opacity: 1;
+        transform: translateY(0vw);
+        transition-property: all;
+        transition-delay: 0.1s;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+    }
+        
+    &-key {
+        height: 10vw;
+        width: 7.15vw;
+        margin: 0.5vw;
+        border-radius: $radius;
+        font-size: 4vw;
+        border: none;
+        background: lighten($dark, 5%);
+        color: $white;
+
+        outline: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: top;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
+
+        svg {
+            width: 4vw;
+            height: 4vw;
+        }
+
+        &:active {
+            background: darken($dark, 5%);
+        }
+        
+        &--wide {
+            width: 25vw!important;
+        }
+        
+        &--extra-wide {
+            width: 50vw!important;
+        }
+        
+        &--activatable::after {
+            content: '';
+            top: 10px;
+            right: 10px;
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: darken($dark, 5%);
+            border-radius: 50%;
+        }
+        
+        &--active::after {
+            margin-top: 1vw;
+            margin-right: 1vw;
+            width: 2vw;
+            height: 2vw;
+            background: $success;
+        }
+        
+        &--dark {
+            background: darken($dark, 5%);
+        }
+
+        &--success {
+            background-color: $success;
+        }
+    }
+
+    &-preview {
+        width: 100%;
+
+        padding: 2vw;
+        margin-bottom: 5vw;
+        height: 10vw;
+        text-align: center;
+        
+        background-color: darken($dark, 4%);
+
+        border-radius: $radius;
+
+        opacity: 1;
+        transform: translateY(0vw);
+        transition-property: all;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+    }
+}
+
+.keyboard--hidden {
+    opacity: 0;
+    backdrop-filter: blur(1vw);
+
+    pointer-events: none;
+
+    .keyboard {
+        &-keys {
+            transform: translateY(20vw);
+            opacity: 0;
+        }
+
+        &-preview {
+            transform: translateY(20vw);
+            opacity: 0;
+        }
+    }
+}

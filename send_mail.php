@@ -1,4 +1,5 @@
 <?php
+require 'mail_content.php';
 
 require_once 'assets/PHPMailer-master/src/Exception.php';
 require_once 'assets/PHPMailer-master/src/PHPMailer.php';
@@ -12,60 +13,29 @@ use PHPMailer\PHPMailer\Exception;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES['video'])) {
 
+        $response = "";
+
         // Define variables
-        $response = array();
+        $client_ID = uniqid();
+
         $video = $_FILES['video'];
-        $video_ID = uniqid();
-        $videoPath = 'recorded_videos/' . $video_ID . '_'  . $video['name'];
+        $videoPath = 'videos/' . $client_ID . '_'  . $video['name'];
 
         $customerEmail = $_POST['customer_email'];
+        $customer_lang = $_POST['lang'];
         $sendingDate = date('Y-m-d H:i');
 
         if (isset($_FILES['image'])) {
-            $group_pic = $_FILES['image'];
+            $picture = $_FILES['image'];
+            $picturePath = 'pictures/' . $client_ID . '_'  . $picture['name'];
         }
 
 
-        // Save file locally
-        move_uploaded_file($video['tmp_name'], $videoPath);
 
-        // Create an entry in database to keep a sorted record of each video associated with date and associated email
-        // Connect to database
-        $conn = new mysqli('localhost', 'Sniper Zone', 'sniper-zone');
-
-        if ($conn->connect_error) {
-            $response['error'] = 'La connexion à la base de données a échoué : ' . $conn->connect_error;
-        }else {
-            
-            if ($conn->select_db("recorded_videos")) {
-                $sql_video_ID = mysqli_real_escape_string($conn, $video_ID);
-                $sql_customerEmail = mysqli_real_escape_string($conn, $customerEmail);
-                $sql_videoPath = mysqli_real_escape_string($conn, $videoPath);
-                $sql_sendingDate = mysqli_real_escape_string($conn, $sendingDate);
-
-                $insertQuery = "INSERT INTO videos (ID, customer_email, video_path, sending_date) VALUES (?, ?, ?, ?)";
-                
-                $stmt = $conn->prepare($insertQuery);
-                $stmt->bind_param('ssss', $sql_video_ID, $sql_customerEmail, $sql_videoPath, $sql_sendingDate);
-                
-                if ($stmt->execute()) {
-                    $response['success'] = true;
-                } else {
-                    $response['error'] = 'Erreur lors de l\'insertion dans la base de données : ' . $stmt->error;
-                }
-                
-                // Fermez la connexion à la base de données
-                $stmt->close();
-                $conn->close();
-            }else{
-                $response['error'] = 'Impossible de rentrer dans la DB : ' . $conn->connect_error;
-            }
-        }
-
-        
-        $mail = new PHPMailer();
 
         // Send the email
+        $mail = new PHPMailer();
+
         try {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
@@ -81,28 +51,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->addAddress($customerEmail, 'Client');
 
             // Mail content
-            $mail->Subject = 'Video';
-            $mail->Body = $_POST['message'];
+            $mail->Subject = $mail_subject[$customer_lang];
+            $mail->Body = $mail_message[$customer_lang];
             
-            $mail->addAttachment($video['tmp_name'], $video['name']);
+            // $mail->addAttachment($video['tmp_name'], $video['name']);
             
-            if(isset($group_pic)) {
-                $mail->addAttachment($group_pic['tmp_name'], $group_pic['name']);
+            if(isset($picture)) {
+                $mail->addAttachment($picture['tmp_name'], $picture['name']);
             }
 
             if ($mail->send()) {
-                $response['succes'] =  true;
+                $response .=  "Le mail à bien été envoyé.";
+                $sendingSuccess = true;
             } else {
-                $response['succes'] =  false;
-                $response['error'] =  $mail->ErrorInfo;
+                $response .=  $mail->ErrorInfo;
+                $sendingSuccess = false;
             }
+
+
         } catch (Exception $error) {
-            $response['succes'] =  false;
-            $response['error'] =  'Erreur lors de l\'envoi de l\'e-mail : ' . $error->getMessage();
+            $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
         }
-        
-        header('Content-Type: application/json');
-        echo json_encode($response);
+
+            
+
+
+
+        // Save file locally
+        move_uploaded_file($video['tmp_name'], $videoPath);
+        if (isset($picture)) {
+            move_uploaded_file($picture['tmp_name'], $picturePath);
+        }
+
+        // Create an entry in database to keep a sorted record of each video associated with date and associated email
+        // Connect to database
+        $conn = new mysqli('localhost', 'Sniper Zone', 'sniper-zone');
+
+        if ($conn->connect_error) {
+            $response .= 'La connexion à la base de données a échoué : ' . $conn->connect_error;
+        }else {
+            if ($conn->select_db("sniper_zone")) {
+                $sql_video_ID = mysqli_real_escape_string($conn, $client_ID);
+                $sql_customerEmail = mysqli_real_escape_string($conn, $customerEmail);
+                $sql_videoPath = mysqli_real_escape_string($conn, $videoPath);
+                $sql_picturePath = isset($picturePath) ? mysqli_real_escape_string($conn, $picturePath) : "";
+                $sql_sendingDate = mysqli_real_escape_string($conn, $sendingDate);
+                $sql_lang = $_POST['lang'];
+
+                $insertQuery = "INSERT INTO customers (ID, lang, customer_email, video_path, picture_path, sending_date, sending_success) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                
+                $stmt = $conn->prepare($insertQuery);
+                if (!$stmt) { die("Erreur de préparation de la requête : " . $conn->error); }                
+                $stmt->bind_param('ssssssi', $sql_video_ID, $sql_lang, $sql_customerEmail, $sql_videoPath, $sql_picturePath, $sql_sendingDate, $sendingSuccess);
+                
+                if ($stmt->execute()) {
+                    $response .= 'Enregistrement du client et des médias réussit.';
+                } else {
+                    $response .= "Erreur lors de l'insertion dans la base de données : " . $stmt->error;
+                }
+                
+                // Fermez la connexion à la base de données
+                $stmt->close();
+                $conn->close();
+            }else{
+                $response = 'Impossible de rentrer dans la DB : ' . $conn->connect_error;
+            }
+        }
+
+        echo $response;
+
     }
 }
 

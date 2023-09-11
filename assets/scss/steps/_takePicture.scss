@@ -24,8 +24,8 @@
             transition: all 0.3s ease;
 
             img {
-                max-height: 45vh;
                 margin-bottom: 5vw;
+                transform: scaleX(-1);
             }
         }
 
@@ -35,6 +35,8 @@
         opacity: 1;
         pointer-events: all;
         background-color: #000000b9;
+
+        
     }
 
     .btn--takePicture {

@@ -67,6 +67,12 @@ img, video {
   transform: scaleX(-1);
 }
 
+body {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
 body::after, body::before {
   content: "";
   position: absolute;
@@ -156,7 +162,7 @@ body.loading .loadingScreen {
 }
 
 .btn {
-  background: #e2651d;
+  background: #595659;
   padding: 3vw;
   border-radius: 1.5vw;
 }
@@ -178,7 +184,7 @@ body.loading .loadingScreen {
   height: 100%;
 }
 .btn-round svg.timer-svg circle {
-  fill: #e2651d;
+  fill: #595659;
 }
 .btn-round.btn-small {
   width: 7.5vw;
@@ -197,12 +203,25 @@ body.loading .loadingScreen {
 }
 .btn--settings {
   position: absolute;
-  bottom: 5vw;
+  bottom: 0;
+  right: 0;
+  width: 5vw;
+  height: 5vw;
+  border-radius: 0;
+  opacity: 0;
+}
+.btn--sendFailedMails {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 5vw;
+  height: 5vw;
+  border-radius: 0;
 }
 .btn--cancel {
   background-color: #e24343;
 }
-.btn--confirm {
+.btn--confirm, .btn--takePicture {
   background-color: #589c51;
 }
 
@@ -215,7 +234,7 @@ body.loading .loadingScreen {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   opacity: 0;
   transform: translateY(5vw);
@@ -339,7 +358,116 @@ h1, .h1, h2, .h2 {
   font-weight: 800;
 }
 
+.keyboard {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 5vw;
+  background: rgba(37, 36, 37, 0.8823529412);
+  user-select: none;
+  transition: opacity 0.3s ease;
+  pointer-events: all;
+  backdrop-filter: blur(1vw);
+  opacity: 1;
+}
+.keyboard-keys {
+  text-align: center;
+  opacity: 1;
+  transform: translateY(0vw);
+  transition-property: all;
+  transition-delay: 0.1s;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+.keyboard-key {
+  height: 10vw;
+  width: 7.15vw;
+  margin: 0.5vw;
+  border-radius: 1.5vw;
+  font-size: 4vw;
+  border: none;
+  background: #323132;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+.keyboard-key svg {
+  width: 4vw;
+  height: 4vw;
+}
+.keyboard-key:active {
+  background: #181718;
+}
+.keyboard-key--wide {
+  width: 25vw !important;
+}
+.keyboard-key--extra-wide {
+  width: 50vw !important;
+}
+.keyboard-key--activatable::after {
+  content: "";
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #181718;
+  border-radius: 50%;
+}
+.keyboard-key--active::after {
+  margin-top: 1vw;
+  margin-right: 1vw;
+  width: 2vw;
+  height: 2vw;
+  background: #589c51;
+}
+.keyboard-key--dark {
+  background: #181718;
+}
+.keyboard-key--success {
+  background-color: #589c51;
+}
+.keyboard-preview {
+  width: 100%;
+  padding: 2vw;
+  margin-bottom: 5vw;
+  height: 10vw;
+  text-align: center;
+  background-color: #1b1a1b;
+  border-radius: 1.5vw;
+  opacity: 1;
+  transform: translateY(0vw);
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+.keyboard--hidden {
+  opacity: 0;
+  backdrop-filter: blur(1vw);
+  pointer-events: none;
+}
+.keyboard--hidden .keyboard-keys {
+  transform: translateY(20vw);
+  opacity: 0;
+}
+.keyboard--hidden .keyboard-preview {
+  transform: translateY(20vw);
+  opacity: 0;
+}
+
 body.clients {
+  height: auto;
+  overflow: visible;
   background-color: #181718;
   padding: 5vw;
   font-size: 3vw;
@@ -361,40 +489,69 @@ body.clients .table-heading {
 body.clients .table-icon {
   width: 4vw;
   height: 4vw;
-  margin-bottom: -1.25vw;
+  margin-bottom: -1vw;
   margin-right: 2vw;
 }
 body.clients .table-row {
   position: relative;
   display: grid;
-  margin-bottom: 5vw;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 3vw;
+  padding-bottom: 3vw;
+}
+body.clients .table-row-infos .table-icon {
+  color: #e24343;
+}
+body.clients .table-row.table-row-mailSucces .table-row-infos .table-icon {
+  color: #589c51 !important;
+}
+body.clients .table-row > td {
+  grid-column: 1/3;
 }
 body.clients .table-row > td:not(.table-row-infos):not(.table-row-actions) {
   padding: 2vw 2.5vw;
   background-color: #252425;
 }
-body.clients .table-row-id {
-  display: none;
+body.clients .table-row a {
+  display: block;
+  width: 100%;
 }
-body.clients .table-row-infos span {
+body.clients .table-row-infos {
+  margin-bottom: 1vw;
+}
+body.clients .table-row-id {
   opacity: 0.4;
   font-size: 2vw;
   margin-left: 1vw;
+}
+body.clients .table-row-lang {
+  margin-right: 2vw;
+  background-color: rgba(255, 255, 255, 0.4196078431);
+  padding: 0.5vw 1vw;
+  border-radius: 1.5vw;
+  color: #252425;
+  font-size: 3vw;
+  text-transform: uppercase;
 }
 body.clients .table-row-email {
   border-radius: 1.5vw 1.5vw 0 0;
 }
 body.clients .table-row-video {
-  border-radius: 0 0 1.5vw 1.5vw;
+  grid-column: 1/2 !important;
+  border-radius: 0 0 0 1.5vw;
 }
-body.clients .table-row-video a {
-  display: block;
-  width: 100%;
+body.clients .table-row-picture {
+  grid-column: 2/4 !important;
+  border-radius: 0 0 1.5vw 0;
 }
 body.clients .table-row-actions {
   position: absolute;
   right: 1.875vw;
   top: 0vw;
+}
+body.clients .table-row--disabled {
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.3019607843);
 }
 
 #selectLang .languages {
@@ -444,13 +601,14 @@ body.clients .table-row-actions {
   display: none;
 }
 #email .email-form input {
+  text-align: center;
   border-radius: 1.5vw;
   width: 100%;
   padding: 3vw;
   font-size: 4vw;
   background: #3f3d3f;
 }
-#email .email-form-submit {
+#email .email-form .btn--confirm {
   margin-top: 5vw;
 }
 @keyframes shake {
@@ -484,20 +642,6 @@ body.clients .table-row-actions {
     transform: rotate(360deg);
   }
 }
-#email .email-form.email-form--empty .email-form-msg--empty {
-  opacity: 1;
-  transform: inherit;
-}
-#email .email-form.email-form--error .email-form-msg--error {
-  opacity: 1;
-  transform: inherit;
-}
-#email .email-form.email-form--valid .email-form-submit {
-  animation: valid 0.3s ease-in;
-}
-#email .email-form.email-form--empty .email-form-submit, #email .email-form.email-form--error .email-form-submit {
-  animation: shake 0.3s ease-in;
-}
 
 #takePicture canvas {
   display: none;
@@ -518,8 +662,8 @@ body.clients .table-row-actions {
   transition: all 0.3s ease;
 }
 #takePicture .takePicture-result img {
-  max-height: 45vh;
   margin-bottom: 5vw;
+  transform: scaleX(-1);
 }
 #takePicture.takePicture--showResult .takePicture-result {
   opacity: 1;

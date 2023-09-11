@@ -1,10 +1,13 @@
 jQuery(function($) {
     // video();
+    send_failed_form();
     step_select_lang();
     step_ask_picture();
     step_ask_mail();
     step_take_picture();
     delete_client();
+    virtual_keyboard();
+    stepPrevious();
     // send_form();
     // popup();
     // loadApp();
@@ -62,12 +65,15 @@ jQuery(function($) {
     
     function stepChange(nextStep) {
         var previousStep = $('section.current');
-        previousStep.removeClass('current');
-
         previousStepId = previousStep.attr('id');
+        previousStep.removeClass('current');
 
         $('section#' + nextStep).addClass('current'); 
         
+        console.log("previous : " + previousStepId, "next : " + nextStep);
+    }
+
+    function stepPrevious() {
         $('.btn--previous').on('click', function() {
             stepChange(previousStepId);
         });
@@ -90,6 +96,7 @@ jQuery(function($) {
                     processData: false,
                     success: function(response) {
                         target.slideUp(600);
+                        console.log(response);
                     },
                     error: function(response) {
                         popup("deletion-failed");
@@ -144,20 +151,93 @@ jQuery(function($) {
             selected_lang = lang;
 
             // Load video in right language
-            stepChange('askPicture');
+            let delay = 4000;
+            popup("brief-begin", delay);
+            setTimeout(() => {
+                step_briefing();
+            }, delay);
         });
     }
 
+    function step_briefing() {
+
+        stepChange('briefing');
+
+        // Change to briefing explaination and ask email after
+        let video = $('#briefing #video');
+        var video_preview = $('#briefing .videoPreview');
+        video[0].play();
+
+        function hasGetUserMedia() {
+            return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        }
+
+        
+        // Detect if browser is able to record the video
+        if (hasGetUserMedia()) {
+            var errorCallback = function(error) {
+                console.log('Reeeejected!', error);
+            };
+
+            var constraints = {
+                video: {
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                    frameRate: { ideal: 6 },
+                },
+            };
+            
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream) {
+                
+                    video_preview.prop('srcObject', stream);
+                
+                    // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
+                    /* video_preview.onloadedmetadata = function(e) {
+                        console.log('onloadedmetadata');
+                    }; */
+    
+                    var mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: 'video/webm; codecs=vp9', // Specify desired video codec
+                    });
+                    var recordedChunks = [];
+            
+                    mediaRecorder.ondataavailable = function(event) {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+            
+                    mediaRecorder.onstop = function() {
+                        // Convert recorded video into a blob to make it sendable
+                        video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
+                        
+                        stepChange('askPicture');
+                    };
+    
+                    mediaRecorder.start();
+    
+                    $('#briefing #video').on('ended', function() {
+                        if (mediaRecorder && mediaRecorder.state === 'recording') {
+                            mediaRecorder.stop();
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Error accessing webcam:', error);
+                });
+        } else {
+            alert('getUserMedia() is not supported in your browser');
+        }
+    }
+
     function step_ask_picture() {
-        $('section#askPicture .btn--acceptPic').on('click', function(){
+        $('section#askPicture .btn--confirm').on('click', function(){
             stepChange('takePicture');
         });
 
-        $('section#askPicture .btn--refusePic').on('click', function(){
-            popup("brief-begin", 4000);
-            setTimeout(() => {
-                step_briefing();
-            }, 4000);
+        $('section#askPicture .btn--cancel').on('click', function(){
+            stepChange('email');
         });
     }
 
@@ -181,7 +261,7 @@ jQuery(function($) {
             var timer_btn = $(this);
             timer_btn.addClass('timerOn');
 
-            var timer_lenght = 10000;
+            var timer_lenght = 1000;
 
             // Animate a progression bar for popup
             var startTime = Date.now();
@@ -223,11 +303,7 @@ jQuery(function($) {
 
             $('section#takePicture').removeClass('takePicture--showResult');
 
-            popup("brief-begin", 4000);
-            setTimeout(() => {
-                step_briefing();
-                
-            }, 4000);
+            stepChange('email');
         });
         
         $('#takePicture .btn--cancel').on('click', function() {
@@ -236,84 +312,12 @@ jQuery(function($) {
         });
     }
 
-    function step_briefing() {
-
-        stepChange('briefing');
-
-        // Change to briefing explaination and ask email after
-        let video = $('#briefing #video');
-        var video_preview = $('#briefing .videoPreview');
-        video[0].play();
-
-        function hasGetUserMedia() {
-            return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-        }
-
-        
-        // Detect if browser is able to record the video
-        if (hasGetUserMedia()) {
-            var errorCallback = function(error) {
-                console.log('Reeeejected!', error);
-            };
-
-            var constraints = {
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    frameRate: { ideal: 12 },
-                },
-            };
-            
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(function(stream) {
-                
-                    video_preview.prop('srcObject', stream);
-                
-                    // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
-                    /* video_preview.onloadedmetadata = function(e) {
-                        console.log('onloadedmetadata');
-                    }; */
-    
-                    var mediaRecorder = new MediaRecorder(stream, {
-                        mimeType: 'video/webm; codecs=vp9', // Specify desired video codec
-                    });
-                    var recordedChunks = [];
-            
-                    mediaRecorder.ondataavailable = function(event) {
-                        if (event.data.size > 0) {
-                            recordedChunks.push(event.data);
-                        }
-                    };
-            
-                    mediaRecorder.onstop = function() {
-                        // Convert recorded video into a blob to make it sendable
-                        video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
-                        
-                        stepChange('email');
-                    };
-    
-                    mediaRecorder.start();
-    
-                    $('#briefing #video').on('ended', function() {
-                        if (mediaRecorder && mediaRecorder.state === 'recording') {
-                            mediaRecorder.stop();
-                        }
-                    });
-                })
-                .catch(function(error) {
-                    console.error('Error accessing webcam:', error);
-                });
-        } else {
-            alert('getUserMedia() is not supported in your browser');
-        }
-    }
-
     function step_ask_mail() {
 
         var form = $('#email .email-form');
         var email_field = form.find('input');
 
-        form.find('.email-form-submit').on('click', function() {
+        form.find('#email .btn--confirm').on('click', function() {
 
             if (email_field.val() == "") {
                 popup("form-empty", 7000, email_field);
@@ -340,37 +344,19 @@ jQuery(function($) {
 
         popup('form-sending', 15000, $('#email .email-form input'));
 
-        var mail_message_fr = "<h1>Merci pour votre visite chez Sniper Zone !</h1><br/><p>Cher client, merci d'être venu chez Sniper Zone. En pièce jointe, vous trouverez une vidéo prouvant votre prise de connaissance du règlement ainsi qu'une photo de groupe (uniquement is vous aviez sélectionné l'option lors du briefing).</p><p>Dans l'attente de vous revoir pour une autre partie !</p><p>Sniper Zone</p>";
-
-        var mail_message_de = "<h1>Vielen Dank für Ihren Besuch bei Sniper Zone!</h1><br/><p>Lieber Kunde, vielen Dank, dass Sie zu Sniper Zone gekommen sind. Im Anhang finden Sie ein Video, das Ihre Kenntnis der Regeln bestätigt, sowie ein Gruppenfoto (nur, wenn Sie die Option während der Einweisung ausgewählt haben).</p><p>Wir freuen uns darauf, Sie wieder für eine weitere Runde zu sehen!</p><p>Sniper Zone</p>";
-
-        var mail_message_en = "<h1>Thank you for visiting Sniper Zone!</h1><br/><p>Dear customer, thank you for coming to Sniper Zone. Attached, you will find a video confirming your acknowledgment of the rules, as well as a group photo (only if you selected the option during the briefing).</p><p>We look forward to seeing you again for another game!</p><p>Sniper Zone</p>";
-
-        var mail_message_nl = "<h1>Bedankt voor uw bezoek aan Sniper Zone!</h1><br/><p>Beste klant, bedankt dat u bij Sniper Zone bent geweest. In de bijlage vindt u een video die uw kennis van de regels bevestigt, evenals een groepsfoto (alleen als u de optie tijdens de briefing hebt geselecteerd).</p><p>We kijken ernaar uit om u weer te zien voor een volgend spel!</p><p>Sniper Zone</p>";
-
         var formData = new FormData();
-        formData.append('video', video_to_send, 'proof.webm');
+
+        formData.append('video', video_to_send, 'video.webm');
 
         if(group_picture_to_send !== null) {
-            formData.append('image', group_picture_to_send, 'captured_image.png');
-        }
+            formData.append('image', group_picture_to_send, 'picture.png');
+        }        
+        
+        formData.append('lang', selected_lang);
 
-        if(selected_lang == "fr") {
-            formData.append('message', mail_message_fr);
-
-        }else if (selected_lang == "de") {
-            formData.append('message', mail_message_de);
-            
-        }else if (selected_lang == "en") {
-            formData.append('message', mail_message_en);
-            
-        }else if (selected_lang == "nl") {
-            formData.append('message', mail_message_nl);
-        }
         formData.append('customer_email', customer_email)
         
         // Send video in ajax form
-        
         $.ajax({
             type: 'POST',
             url: 'send_mail.php',
@@ -384,6 +370,8 @@ jQuery(function($) {
                 setTimeout(() => {
                     location.reload();
                 }, 7000);
+
+                console.log(response);
             },
             error: function(response) {
                 $('#email .email-form input').trigger('click');
@@ -391,7 +379,228 @@ jQuery(function($) {
                 setTimeout(() => {
                     location.reload();
                 }, 10000);
+
+                console.log(response);
             }
+        });
+    }
+
+    function send_failed_form() {
+
+        popup('failed-mails-sending');
+
+        var formData = new FormData();
+        
+        // Send video in ajax form
+        $.ajax({
+            type: 'POST',
+            url: 'send_failed_mail.php',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                $('[data-popup="failed-mails-sending"]').removeClass('popup--open');
+                popup('failed-mails-success', 2000);
+                $('.succes-mail-text').html(response);
+            },
+            error: function(response) {
+                $('[data-popup="failed-mails-sending"]').removeClass('popup--open');
+                popup('failed-mails-error', 2000);
+                $('.failed-mail-text').html(response);
+            }
+        });
+    }
+
+    function virtual_keyboard() {
+        const Keyboard = {
+            elements: {
+                main: null,
+                keysContainer: null,
+                keys: []
+            },
+        
+            eventHandlers: {
+                oninput: null,
+                onclose: null
+            },
+        
+            properties: {
+                value: "",
+                capsLock: false
+            },
+        
+            init() {
+                // Create main elements
+                this.elements.main = $('<div></div>');
+                this.elements.inputPreview = $('<div></div>');
+                this.elements.inputPreviewText = $('<span></span>');
+                this.elements.keysContainer = $('<div></div>');
+        
+                // Setup main elements
+                this.elements.main.addClass("keyboard keyboard--hidden");
+                this.elements.keysContainer.addClass("keyboard-keys");
+                this.elements.inputPreview.addClass("keyboard-preview");
+                this.elements.keysContainer.append(this._createKeys());
+        
+                this.elements.keys = this.elements.keysContainer.find(".keyboard-key");
+        
+                // Add to DOM
+                this.elements.inputPreview.append(this.elements.inputPreviewText);
+                this.elements.main.append(this.elements.inputPreview);
+                this.elements.main.append(this.elements.keysContainer);
+                $("body").append(this.elements.main);
+        
+                // Automatically use keyboard for elements with .use-keyboard-input
+                $(".use-keyboard-input").each(function () {
+                    $(this).on("focus", () => {
+                        Keyboard.open($(this).val(), (currentValue) => {
+                            $(this).val(currentValue);
+                        });
+                    });
+                });
+            },
+        
+            _createKeys() {
+                const fragment = $(document.createDocumentFragment());
+                const keyLayout = [
+                    "@", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+                    "a", "z", "e", "r", "t", "y", "u", "i", "o", "p",
+                    "q", "s", "d", "f", "g", "h", "j", "k", "l", "m",
+                    "w", "x", "c", "v", "b", "n", ".", "backspace",
+                    "caps", 'done'
+                ];
+        
+                // Creates HTML for an icon
+                const createIconHTML = (icon) => {
+                    return icon;
+                };
+        
+                // Build the keyboard
+                keyLayout.forEach(key => {
+                    const keyElement = $("<button></button>");
+                    const insertLineBreak = ["backspace", "p", "m", "backspace"].indexOf(key) !== -1;
+        
+                    // Add attributes/classes
+                    keyElement.attr("type", "button");
+                    keyElement.addClass("keyboard-key");
+        
+                    switch (key) {
+                        case "backspace":
+                            keyElement.addClass("keyboard-key--wide");
+                            keyElement.html(createIconHTML('<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 9L11 15M11 9L17 15M2.72 12.96L7.04 18.72C7.392 19.1893 7.568 19.424 7.79105 19.5932C7.9886 19.7432 8.21232 19.855 8.45077 19.9231C8.72 20 9.01334 20 9.6 20H17.2C18.8802 20 19.7202 20 20.362 19.673C20.9265 19.3854 21.3854 18.9265 21.673 18.362C22 17.7202 22 16.8802 22 15.2V8.8C22 7.11984 22 6.27976 21.673 5.63803C21.3854 5.07354 20.9265 4.6146 20.362 4.32698C19.7202 4 18.8802 4 17.2 4H9.6C9.01334 4 8.72 4 8.45077 4.07689C8.21232 4.14499 7.9886 4.25685 7.79105 4.40675C7.568 4.576 7.392 4.81067 7.04 5.28L2.72 11.04C2.46181 11.3843 2.33271 11.5564 2.28294 11.7454C2.23902 11.9123 2.23902 12.0877 2.28294 12.2546C2.33271 12.4436 2.46181 12.6157 2.72 12.96Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'));
+        
+                            keyElement.on("click", () => {
+                                this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
+                                this._triggerEvent("oninput");
+                            });
+        
+                            break;
+        
+                        case "caps":
+                            keyElement.addClass("keyboard-key--wide keyboard-key--activatable");
+                            keyElement.html(createIconHTML('<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 3H3M18 13L12 7M12 7L6 13M12 7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'));
+        
+                            keyElement.on("click", () => {
+                                this._toggleCapsLock();
+                                keyElement.toggleClass("keyboard-key--active", this.properties.capsLock);
+                            });
+        
+                            break;
+        
+                        case "enter":
+                            keyElement.addClass("keyboard-key--wide");
+                            keyElement.html(createIconHTML("keyboard_return"));
+        
+                            keyElement.on("click", () => {
+                                this.properties.value += "\n";
+                                this._triggerEvent("oninput");
+                            });
+        
+                            break;
+        
+                        case "space":
+                            keyElement.addClass("keyboard-key--extra-wide");
+                            keyElement.html(createIconHTML("space_bar"));
+        
+                            keyElement.on("click", () => {
+                                this.properties.value += " ";
+                                this._triggerEvent("oninput");
+                            });
+        
+                            break;
+        
+                        case "done":
+                            keyElement.addClass("keyboard-key--wide keyboard-key--success");
+                            keyElement.html(createIconHTML('<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.0857V12.0057C21.9988 14.1621 21.3005 16.2604 20.0093 17.9875C18.7182 19.7147 16.9033 20.9782 14.8354 21.5896C12.7674 22.201 10.5573 22.1276 8.53447 21.3803C6.51168 20.633 4.78465 19.2518 3.61096 17.4428C2.43727 15.6338 1.87979 13.4938 2.02168 11.342C2.16356 9.19029 2.99721 7.14205 4.39828 5.5028C5.79935 3.86354 7.69279 2.72111 9.79619 2.24587C11.8996 1.77063 14.1003 1.98806 16.07 2.86572M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'));
+        
+                            keyElement.on("click", () => {
+                                this.close();
+                                this._triggerEvent("onclose");
+                            });
+        
+                            break;
+        
+                        default:
+                            keyElement.text(key.toLowerCase());
+        
+                            keyElement.on("click", () => {
+                                this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
+                                this._triggerEvent("oninput");
+                                // this.elements.inputPreview.text(this.properties.value);
+                            });
+        
+                            break;
+                    }
+        
+                    fragment.append(keyElement);
+        
+                    if (insertLineBreak) {
+                        fragment.append(document.createElement("br"));
+                    }
+                });
+        
+                return fragment;
+            },
+        
+            _triggerEvent(handlerName) {
+                if (typeof this.eventHandlers[handlerName] == "function") {
+                    this.eventHandlers[handlerName](this.properties.value);
+                    this.elements.inputPreview.text(this.properties.value);
+                }
+            },
+        
+            _toggleCapsLock() {
+                this.properties.capsLock = !this.properties.capsLock;
+        
+                for (const key of this.elements.keys) {
+                    if (key.childElementCount === 0) {
+                        key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+                    }
+                }
+            },
+        
+            open(initialValue, oninput, onclose) {
+                this.properties.value = initialValue || "";
+                this.eventHandlers.oninput = oninput;
+                this.eventHandlers.onclose = onclose;
+                this.elements.main.removeClass("keyboard--hidden");
+            },
+        
+            close() {
+                this.properties.value = "";
+                this.eventHandlers.oninput = oninput;
+                this.eventHandlers.onclose = onclose;
+                this.elements.main.addClass("keyboard--hidden");
+            }
+        };
+
+        Keyboard.init();
+        
+        $("input, textarea").on("focus", function() {
+            var field = $(this);
+            Keyboard.open($(this).val(), (currentValue) => {
+                field.val(currentValue);
+            });
         });
     }
 });

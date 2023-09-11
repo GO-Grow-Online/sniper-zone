@@ -12,6 +12,7 @@
             }
 
             input {
+                text-align: center;
                 border-radius: $radius;
                 width: 100%;
                 padding: $card-p;
@@ -19,7 +20,7 @@
                 background: lighten($dark, 10%);
             }
 
-            &-submit {
+            .btn--confirm {
                 margin-top: 5vw;
             }
 
@@ -37,35 +38,6 @@
                 0% { background: lighten($dark, 10%); transform: rotate(0); }
                 50% { background: $success; }
                 100% { background: lighten($dark, 10%); transform: rotate(360deg); }
-            }
-
-            &.email-form {
-
-                &--empty {
-                    .email-form-msg--empty {
-                        opacity: 1;
-                        transform: inherit;
-                    }
-                }
-                
-                &--error {
-                    .email-form-msg--error {
-                        opacity: 1;
-                        transform: inherit;
-                    }
-                }
-
-                &--valid {
-                    .email-form-submit {
-                        animation: valid 0.3s ease-in;
-                    }
-                }
-
-                &--empty, &--error {
-                    .email-form-submit {
-                        animation: shake 0.3s ease-in;
-                    }
-                }
             }
         }
     }

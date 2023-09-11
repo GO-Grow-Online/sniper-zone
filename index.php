@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sniperzone testing</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/jquery.js"></script>
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
 
@@ -34,8 +34,8 @@
                 </li>
                 <li>
                     <button class="btn--lang" data-lang="de">
-                        <img src="assets/medias/image/de_flag.svg" alt="Deutch">
-                        <span>Deutch</span>
+                        <img src="assets/medias/image/de_flag.svg" alt="Deutsch">
+                        <span>Deutsch</span>
                     </button>
                 </li>
                 <li>
@@ -46,8 +46,8 @@
                 </li>
                 <li>
                     <button class="btn--lang" data-lang="nl">
-                        <img src="assets/medias/image/nl_flag.svg" alt="Neederlands">
-                        <span>Neederlands</span>
+                        <img src="assets/medias/image/nl_flag.svg" alt="Nederlands">
+                        <span>Nederlands</span>
                     </button>
                 </li>
             </ul>
@@ -68,7 +68,7 @@
 
         <section id="email" class="">
             
-            <!-- button class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></!-->
+            <button class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
             <div class="email-form">
                 <div class="email-text">
@@ -80,13 +80,13 @@
                 <label for="email_field">Email</label>
                 <input name="email" id="email_field" type="text"/>
 
-                <button class="btn btn-round email-form-submit"><svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L6 12L1 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button class="btn btn-round btn--confirm"><svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L6 12L1 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
         </section>
 
         <section id="askPicture" class="">
             
-            <button class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <!-- button class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></!-->
 
             <p data-trad="fr">Souhaitez-vous prendre une photo de groupe avant de commencer ?</p>
             <p data-trad="fr" class="small">(La photo sera envoyée dans les jours suivants sur l'adresse e-mail que vous entrerez dans les prochaines étapes.)</p>
@@ -101,8 +101,8 @@
             <p data-trad="nl" class="small">(De foto wordt in de komende dagen naar het opgegeven e-mailadres gestuurd tijdens de volgende stappen.)</p>
 
             <div class="btn-group">
-                <button class="btn btn-round btn--acceptPic"><svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L6 12L1 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                <button class="btn btn-round btn--refusePic"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button class="btn btn-round btn--confirm"><svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L6 12L1 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button class="btn btn-round btn--cancel"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
         </section>
 
@@ -173,6 +173,27 @@
                 <p data-trad="de">Das Briefing ist jetzt abgeschlossen. Eine E-Mail wurde an die angegebene Adresse gesendet. Vielen Dank für Ihre Aufmerksamkeit.</p>
                 <p data-trad="en">The briefing is now done. An email has been sent to the provided address. Thank you for your attention.</p>
                 <p data-trad="nl">De briefing is nu klaar. Een e-mail is verzonden naar het opgegeven adres. Bedankt voor uw aandacht.</p>
+            </div>
+        </div>
+
+        <div class="popup popup-center" data-popup="failed-mails-sending">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p>Envois des mails...</p>
+            </div>
+        </div>
+
+        <div class="popup popup-center" data-popup="failed-mails-error">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p class="failed-mail-text"></p>
+            </div>
+        </div>
+
+        <div class="popup popup-center" data-popup="failed-mails-success">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p class="succes-mail-text"></p>
             </div>
         </div>
 

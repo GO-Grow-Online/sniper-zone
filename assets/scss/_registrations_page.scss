@@ -1,5 +1,8 @@
 body.clients {
 
+    height: auto;
+    overflow: visible;
+
     .btn--previous {
         position: relative;
         left: inherit;
@@ -26,7 +29,7 @@ body.clients {
         &-icon {
             width: 4vw;
             height: 4vw;
-            margin-bottom: -1.25vw;
+            margin-bottom: -1vw;
             margin-right: 2vw;
         }   
 
@@ -34,20 +37,50 @@ body.clients {
 
             position: relative;
             display: grid;
-            margin-bottom: 5vw;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 3vw;
+            padding-bottom: 3vw;
+            // border-bottom: 0.1vw solid #ffffff27;
+
+            &-infos .table-icon {
+                color: $failed;
+            }
+
+            &.table-row-mailSucces {
+                .table-row-infos .table-icon {
+                    color: $success!important;
+                }
+            }
+
+            & > td {
+                grid-column: 1 / 3;
+            }
 
             & > td:not(.table-row-infos):not(.table-row-actions) {
                 padding: 2vw 2.5vw;
                 background-color: $dark;
             }
 
-            &-id { display: none; }
+            a { display: block; width: 100%; }
+
             &-infos {
-                span {
-                    opacity: .4;
-                    font-size: 2vw;
-                    margin-left: 1vw;
-                }
+                margin-bottom: 1vw;
+            }
+            
+            &-id {
+                opacity: .4;
+                font-size: 2vw;
+                margin-left: 1vw;
+            }
+
+            &-lang {
+                margin-right: 2vw;
+                background-color: #ffffff6b;
+                padding: 0.5vw 1vw;
+                border-radius: $radius;
+                color: $dark;
+                font-size: 3vw;
+                text-transform: uppercase;
             }
 
             &-email {
@@ -55,8 +88,13 @@ body.clients {
             }
 
             &-video {
-                a { display: block; width: 100%; }
-                border-radius: 0 0 $radius $radius;
+                grid-column: 1 / 2!important;
+                border-radius: 0 0 0 $radius;
+            }
+            
+            &-picture {
+                grid-column: 2 / 4!important;
+                border-radius: 0 0 $radius 0;
             }
 
             &-actions {
@@ -65,6 +103,11 @@ body.clients {
                 position: absolute;
                 right: $size * 0.25;
                 top: $size * 0;
+            }
+
+            &--disabled {
+                pointer-events: none;
+                color: #ffffff4d;
             }
         }
     }
