@@ -69,13 +69,24 @@ jQuery(function($) {
         previousStep.removeClass('current');
 
         $('section#' + nextStep).addClass('current'); 
-        
-        console.log("previous : " + previousStepId, "next : " + nextStep);
     }
 
     function stepPrevious() {
         $('.btn--previous').on('click', function() {
-            stepChange(previousStepId);
+
+            let parent_section = $(this).parent().attr('id');
+
+            console.log("section parent : " + parent_section);
+            console.log(parent_section == "takePicture");
+
+            // Exeptions
+            if(parent_section == "takePicture") {
+                stepChange('askPicture');
+
+            // Normal behavior
+            }else{
+                stepChange(previousStepId);
+            }
         });
     }
 
@@ -86,7 +97,7 @@ jQuery(function($) {
             var formData = new FormData();
             formData.append('id', id);
             
-            popup('deletion-warning', 5000, $('[data-popup="deletion-warning"] .btn'));
+            popup('deletion-warning', 10000, $('[data-popup="deletion-warning"] .btn'));
             $('[data-popup="deletion-warning"] .btn--confirm').on('click', function() {
                 $.ajax({
                     type: 'POST',
@@ -110,35 +121,51 @@ jQuery(function($) {
     function popup(data_popup, opening_time = 7000, click_close_trigger = null) {
         
         var popup = $(".popup[data-popup='" + data_popup + "']");
-        var progress_bar = popup.find('.popup-closeDelay > span');
+        
         popup.addClass('popup--open');
-
-        // Animate a progression bar for popup
-        var startTime = Date.now();
-        var endTime = startTime + opening_time;
-
-        function updateProgressBar() {
-            var currentTime = Date.now();
-            var elapsedTime = currentTime - startTime;
-            var progress = (elapsedTime / opening_time) * 100;
-
-            progress_bar.css('width', progress + "%");
-
-            if (currentTime < endTime) {
-                requestAnimationFrame(updateProgressBar);
-            } else {
-                popup.removeClass('popup--open');
+        if (!popup.hasClass('popup-infinite')) {
+            var timer;
+            var progress_bar = popup.find('.popup-closeDelay > span');    
+    
+            // Animate a progression bar for popup
+            var startTime = Date.now();
+            var endTime = startTime + opening_time;
+    
+            function updateProgressBar() {
+                var currentTime = Date.now();
+                var elapsedTime = currentTime - startTime;
+                var progress = (elapsedTime / opening_time) * 100;
+    
+                progress_bar.css('width', progress + "%");
+    
+                if (currentTime < endTime) {
+                    // requestanimation is used to close the popup after delay
+                    // timber will be killed when closing popup to prevent affecting the upcommings ones 
+                    timer = requestAnimationFrame(updateProgressBar);
+                } else {
+                    popup.removeClass('popup--open');
+                }
+            }
+    
+            updateProgressBar();
+    
+            if(click_close_trigger != null) {
+                click_close_trigger.on('click', function(){
+                    // kill animationframe so it does not affect upcomming popups
+                    cancelAnimationFrame(timer);
+                    popup.removeClass('popup--open')
+                });
             }
         }
+    }
 
-        updateProgressBar();
-
-        if(click_close_trigger != null) {
-            click_close_trigger.on('click', function(){
-                popup.removeClass('popup--open')
-            });
+    function closePopup(data_popup) {
+        var popup_to_close = $(".popup[data-popup='" + data_popup + "']");
+        if (popup_to_close.hasClass('popup-infinite')) {
+            popup_to_close.removeClass('popup--open');
         }
     }
+    
 
 
     
@@ -163,9 +190,15 @@ jQuery(function($) {
 
         stepChange('briefing');
 
+
         // Change to briefing explaination and ask email after
         let video = $('#briefing #video');
+        let source = video.find('source');
+        if (selected_lang) {
+            source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+        }
         var video_preview = $('#briefing .videoPreview');
+        video[0].load();
         video[0].play();
 
         function hasGetUserMedia() {
@@ -238,6 +271,9 @@ jQuery(function($) {
 
         $('section#askPicture .btn--cancel').on('click', function(){
             stepChange('email');
+
+            // Unset picture in case user stepped back from email and takePicture
+            group_picture_to_send = null;
         });
     }
 
@@ -317,7 +353,7 @@ jQuery(function($) {
         var form = $('#email .email-form');
         var email_field = form.find('input');
 
-        form.find('#email .btn--confirm').on('click', function() {
+        form.find('.btn--confirm').on('click', function() {
 
             if (email_field.val() == "") {
                 popup("form-empty", 7000, email_field);
@@ -365,7 +401,7 @@ jQuery(function($) {
             processData: false,
             success: function(response) {
 
-                $('#email .email-form input').trigger('click');
+                closePopup("form-sending");
                 popup('succes', 7000);
                 setTimeout(() => {
                     location.reload();
@@ -374,7 +410,7 @@ jQuery(function($) {
                 console.log(response);
             },
             error: function(response) {
-                $('#email .email-form input').trigger('click');
+                closePopup("form-sending");
                 popup('succes', 10000);
                 setTimeout(() => {
                     location.reload();
@@ -565,7 +601,7 @@ jQuery(function($) {
             _triggerEvent(handlerName) {
                 if (typeof this.eventHandlers[handlerName] == "function") {
                     this.eventHandlers[handlerName](this.properties.value);
-                    this.elements.inputPreview.text(this.properties.value);
+                    this.elements.inputPreviewText.text(this.properties.value);
                 }
             },
         

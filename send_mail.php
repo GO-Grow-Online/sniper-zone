@@ -64,7 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $response .=  "Le mail à bien été envoyé.";
                 $sendingSuccess = true;
             } else {
-                $response .=  $mail->ErrorInfo;
+                // $response .=  $mail->ErrorInfo;
+                $response .=  "L'nvois du mail à échoué. Connection internet indisponible.";
                 $sendingSuccess = false;
             }
 

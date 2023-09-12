@@ -1,4 +1,6 @@
 <?php
+$response = "";
+
 // Check if ID is set
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
@@ -38,7 +40,7 @@ if (isset($_POST['id'])) {
         if (file_exists($picturePath)) { unlink($picturePath); $picture_deleted = true; }
         
     } else {
-        echo "An error occured : " . $query->error;
+        $response = "An error occured : " . $query->error;
         $video_deleted = false;
         $picture_deleted = false;
     }
@@ -51,17 +53,17 @@ if (isset($_POST['id'])) {
 
     // if entry is succefully deleted, delete associated video
     if ($query->execute()) {
-        if ($video_deleted && $picture_deleted) {
-            echo "DataBase entry deleted. Deleted files : vidéo(" . $video_deleted . "), picture(" . $picture_deleted . ")";
-        }
+        $response = "DataBase entry deleted. Deleted files : vidéo(" . $video_deleted . "), picture(" . $picture_deleted . ")";
     } else {
-        echo "An error occured : " . $query->error;
+        $response = "An error occured : " . $query->error;
     }
 
     // Fermer la connexion à la base de données
     $query->close();
     $conn->close();
 } else {
-    echo "ID is missing from command.";
+    $response = "ID is missing from command.";
 }
+
+echo $response;
 ?>

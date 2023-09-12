@@ -59,10 +59,7 @@
 
             <video autoplay class="videoPreview"></video>
             <video preload="auto" id="video">
-                <source src="assets/medias/video/briefing-fr.mp4" type="video/mp4">
-                <source src="assets/medias/video/briefing-de.mp4" type="video/mp4">
-                <source src="assets/medias/video/briefing-en.mp4" type="video/mp4">
-                <source src="assets/medias/video/briefing-nl.mp4" type="video/mp4">
+                <source src="" type="video/mp4">
             </video>
         </section>
 
@@ -108,7 +105,7 @@
 
         <section id="takePicture" class="">
             
-            <!-- button class="btn btn-round btn--previous"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></!-->
+            <button class="btn btn-round btn--previous"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
             <video autoplay class="videoPreview"></video>
             <button class="btn btn-round btn--takePicture">
@@ -156,9 +153,9 @@
             </div>
         </div>
 
-        <div class="popup" data-popup="form-sending">
-            <div class="popup-msg popup-success">
-                <span class="popup-closeDelay"><span></span></span>
+        <div class="popup popup-infinite popup-center" data-popup="form-sending">
+            <div class="popup-msg">
+                <svg class="loader" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.25V4.75M12 18V22M18.25 12H21.75M2.75 12H4.25M5.54289 18.4571L6.25 17.75M5.33579 5.41579L6.75 6.83M19.0784 19.0784L16.25 16.25M18.8713 5.20868L16.75 7.33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p data-trad="fr">Envoi de l'email...</p>
                 <p data-trad="de">E-Mail wird gesendet...</p>
                 <p data-trad="en">Sending email...</p>
@@ -176,21 +173,21 @@
             </div>
         </div>
 
-        <div class="popup popup-center" data-popup="failed-mails-sending">
+        <div class="popup popup-infinite popup-center" data-popup="failed-mails-sending">
             <div class="popup-msg">
-                <span class="popup-closeDelay"><span></span></span>
+                <svg class="loader" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.25V4.75M12 18V22M18.25 12H21.75M2.75 12H4.25M5.54289 18.4571L6.25 17.75M5.33579 5.41579L6.75 6.83M19.0784 19.0784L16.25 16.25M18.8713 5.20868L16.75 7.33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p>Envois des mails...</p>
             </div>
         </div>
 
-        <div class="popup popup-center" data-popup="failed-mails-error">
+        <div class="popup" data-popup="failed-mails-error">
             <div class="popup-msg">
                 <span class="popup-closeDelay"><span></span></span>
                 <p class="failed-mail-text"></p>
             </div>
         </div>
 
-        <div class="popup popup-center" data-popup="failed-mails-success">
+        <div class="popup" data-popup="failed-mails-success">
             <div class="popup-msg">
                 <span class="popup-closeDelay"><span></span></span>
                 <p class="succes-mail-text"></p>

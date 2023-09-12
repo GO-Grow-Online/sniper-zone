@@ -161,6 +161,20 @@ body.loading .loadingScreen {
   opacity: 1;
 }
 
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.loader {
+  width: 8vw;
+  height: 8vw;
+  animation: rotate 1.5s infinite steps(8);
+}
+
 .btn {
   background: #595659;
   padding: 3vw;
@@ -231,14 +245,17 @@ body.loading .loadingScreen {
   pointer-events: none;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   opacity: 0;
   transform: translateY(5vw);
   transition: all 0.3s ease;
+}
+.popup .loader {
+  margin-bottom: 2vw;
 }
 .popup .btn-group {
   margin-top: 5vw;
@@ -336,11 +353,11 @@ body.loading .loadingScreen {
   font-display: swap;
 }
 a {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 body {
-  font-weight: 600;
+  font-weight: 400;
   font-size: 4vw;
   line-height: 5vw;
   font-family: "Urbanist";
@@ -449,6 +466,28 @@ h1, .h1, h2, .h2 {
   transition-property: all;
   transition-duration: 0.3s;
   transition-timing-function: ease;
+}
+@keyframes blink {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.keyboard-preview > span {
+  position: relative;
+}
+.keyboard-preview > span::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -0.5vw;
+  top: 0;
+  width: 0.5vw;
+  height: 6vw;
+  background-color: #fff;
+  animation: blink 0.5s alternate-reverse infinite steps(2);
 }
 
 .keyboard--hidden {
