@@ -32,7 +32,6 @@
         border-radius: $radius;
         font-size: 4vw;
         border: none;
-        background: lighten($dark, 5%);
         color: $white;
 
         outline: none;
@@ -45,6 +44,10 @@
         -webkit-tap-highlight-color: transparent;
         position: relative;
 
+        background: lighten($dark, 5%);
+        transform: scale(1);
+        transition: all 0.3s ease;
+
         svg {
             width: 4vw;
             height: 4vw;
@@ -52,6 +55,7 @@
 
         &:active {
             background: darken($dark, 5%);
+            transform: scale(0.7);
         }
         
         &--wide {
@@ -67,8 +71,8 @@
             top: 10px;
             right: 10px;
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 2vw;
+            height: 2vw;
             background: darken($dark, 5%);
             border-radius: 50%;
         }
@@ -76,8 +80,6 @@
         &--active::after {
             margin-top: 1vw;
             margin-right: 1vw;
-            width: 2vw;
-            height: 2vw;
             background: $success;
         }
         

@@ -405,7 +405,6 @@ h1, .h1, h2, .h2 {
   border-radius: 1.5vw;
   font-size: 4vw;
   border: none;
-  background: #323132;
   color: #fff;
   outline: none;
   cursor: pointer;
@@ -416,6 +415,9 @@ h1, .h1, h2, .h2 {
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   position: relative;
+  background: #323132;
+  transform: scale(1);
+  transition: all 0.3s ease;
 }
 .keyboard-key svg {
   width: 4vw;
@@ -423,6 +425,7 @@ h1, .h1, h2, .h2 {
 }
 .keyboard-key:active {
   background: #181718;
+  transform: scale(0.7);
 }
 .keyboard-key--wide {
   width: 25vw !important;
@@ -435,16 +438,14 @@ h1, .h1, h2, .h2 {
   top: 10px;
   right: 10px;
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 2vw;
+  height: 2vw;
   background: #181718;
   border-radius: 50%;
 }
 .keyboard-key--active::after {
   margin-top: 1vw;
   margin-right: 1vw;
-  width: 2vw;
-  height: 2vw;
   background: #589c51;
 }
 .keyboard-key--dark {
