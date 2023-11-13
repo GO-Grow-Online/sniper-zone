@@ -35,19 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Send the email
         $mail = new PHPMailer();
+        $mail_admin = new PHPMailer();
 
         try {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPSecure = 'ssl'; 
-            $mail->Port = 465;
+            $mail->SMTPSecure = 'tls'; 
+            $mail->Port = 587;
             $mail->SMTPAuth = true;
-            $mail->Username = 'julien.growonline@gmail.com';
-            $mail->Password = 'dbiqnrvmmsqcrira';
+            $mail->Username = 'noreplysniperzone@gmail.com';
+            $mail->Password = 'zpyl mazf awbf eloq';
+
             $mail->isHTML(true);
 
             // Sender & receiver
-            $mail->setFrom('julien.growonline@gmail.com', 'Sniper zone');
+            $mail->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
             $mail->addAddress($customerEmail, 'Client');
 
             // Mail content
@@ -65,18 +67,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sendingSuccess = true;
             } else {
                 // $response .=  $mail->ErrorInfo;
-                $response .=  "L'nvois du mail à échoué. Connection internet indisponible.";
+                $response .=  "Mail non-envoyé. Connection indisponible.";
                 $sendingSuccess = false;
             }
 
 
+            // Second mail with video attachment for admin
+            $mail_admin->isSMTP();
+            $mail_admin->Host = 'smtp.gmail.com';
+            $mail_admin->SMTPSecure = 'tls'; 
+            $mail_admin->Port = 587;
+            $mail_admin->SMTPAuth = true;
+            $mail_admin->Username = 'noreplysniperzone@gmail.com';
+            $mail_admin->Password = 'zpyl mazf awbf eloq';
+
+            $mail_admin->isHTML(true);
+
+            $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
+            $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
+
+            $mail_admin->Subject = "Borne briefing - Sniper Zone";
+            $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";
+
+            $mail_admin->addAttachment($video['tmp_name'], $video['name']);
+
+            if ($mail_admin->send()) {
+                $response .=  "Mail administrateur envoyé avec succès.";
+                $sendingAdminSuccess = true;
+            } else {
+                $response .=  "Mail administrateur non-envoyé. Connection indisponible.";
+                $sendingAdminSuccess = false;
+            }
+
         } catch (Exception $error) {
             $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
         }
-
-            
-
-
 
         // Save file locally
         move_uploaded_file($video['tmp_name'], $videoPath);
@@ -99,11 +124,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql_sendingDate = mysqli_real_escape_string($conn, $sendingDate);
                 $sql_lang = $_POST['lang'];
 
-                $insertQuery = "INSERT INTO customers (ID, lang, customer_email, video_path, picture_path, sending_date, sending_success) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $insertQuery = "INSERT INTO customers (ID, lang, customer_email, video_path, picture_path, sending_date, sending_success, sending_admin_success) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = $conn->prepare($insertQuery);
                 if (!$stmt) { die("Erreur de préparation de la requête : " . $conn->error); }                
-                $stmt->bind_param('ssssssi', $sql_video_ID, $sql_lang, $sql_customerEmail, $sql_videoPath, $sql_picturePath, $sql_sendingDate, $sendingSuccess);
+                $stmt->bind_param('ssssssii', $sql_video_ID, $sql_lang, $sql_customerEmail, $sql_videoPath, $sql_picturePath, $sql_sendingDate, $sendingSuccess, $sendingAdminSuccess);
                 
                 if ($stmt->execute()) {
                     $response .= 'Enregistrement du client et des médias réussit.';

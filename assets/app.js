@@ -1,6 +1,6 @@
 jQuery(function($) {
     // video();
-    send_failed_form();
+    start_scripts();
     step_select_lang();
     step_ask_picture();
     step_ask_mail();
@@ -54,7 +54,7 @@ jQuery(function($) {
 
                     if (loadedSources === totalSources) {
                         $('body').removeClass('loading');
-                        console.log('Toutes les vidéos ont été chargées.');
+                        // console.log('Toutes les vidéos ont été chargées.');
                     }
                 };
 
@@ -76,8 +76,8 @@ jQuery(function($) {
 
             let parent_section = $(this).parent().attr('id');
 
-            console.log("section parent : " + parent_section);
-            console.log(parent_section == "takePicture");
+            // console.log("section parent : " + parent_section);
+            // console.log(parent_section == "takePicture");
 
             // Exeptions
             if(parent_section == "takePicture") {
@@ -107,11 +107,15 @@ jQuery(function($) {
                     processData: false,
                     success: function(response) {
                         target.slideUp(600);
-                        console.log(response);
+                        // console.log(response);
+
+                        location.reload();
                     },
                     error: function(response) {
                         popup("deletion-failed");
-                        console.log(response);
+                        // console.log(response);
+
+                        location.reload();
                     }
                 });
             });    
@@ -195,7 +199,9 @@ jQuery(function($) {
         let video = $('#briefing #video');
         let source = video.find('source');
         if (selected_lang) {
-            source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+            // This line displays a short video to avoid loosing 7 minutes of your life
+            source.attr('src', 'assets/medias/video/debug.mp4')
+            // source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
         }
         var video_preview = $('#briefing .videoPreview');
         video[0].load();
@@ -209,14 +215,12 @@ jQuery(function($) {
         // Detect if browser is able to record the video
         if (hasGetUserMedia()) {
             var errorCallback = function(error) {
-                console.log('Reeeejected!', error);
+                // console.log('Reeeejected!', error);
             };
 
             var constraints = {
                 video: {
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 },
-                    frameRate: { ideal: 6 },
+                    frameRate: { ideal: 6 }
                 },
             };
             
@@ -287,6 +291,7 @@ jQuery(function($) {
             .then(function(stream) {
                 video_preview.prop('srcObject', stream);
                 // $('#takePicture .videoPreview')[0].play();
+                
             })
             .catch(function(error) {
                 console.error('Error accessing webcam:', error);
@@ -319,6 +324,23 @@ jQuery(function($) {
                     canvas.height = video_preview[0].videoHeight;
                     const context = canvas.getContext('2d');
                     context.drawImage(video_preview[0], 0, 0, canvas.width, canvas.height);
+
+                    // Draw watermark (logo) on the bottom right corner
+                    var watermark = $('.takePicture-preview-watermark')[0];
+
+                    // Set width and height while keeping aspect Ratio
+                    var watermarkWidth = 150;
+                    var watermarkHeight = (watermarkWidth / watermark.width) * watermark.height;
+                    var watermarkX = 10; // 10 pixels from the left edge
+                    var watermarkY = canvas.height - watermarkHeight - 10; // 10 pixels from the bottom edge
+                    context.save();
+                    context.scale(-1, 1);
+                    context.drawImage(video_preview[0], -canvas.width, 0, canvas.width, canvas.height);
+                    context.restore();
+                    
+                    // Dessine le watermark à la position ajustée
+                    context.drawImage(watermark, canvas.width - watermarkX - watermarkWidth, watermarkY, watermarkWidth, watermarkHeight);
+                                        
                     // Display picture
                     capturedImage.src = canvas.toDataURL('image/png');
                     capturedImage.attr('src', capturedImage.src);
@@ -407,7 +429,7 @@ jQuery(function($) {
                     location.reload();
                 }, 7000);
 
-                console.log(response);
+                // console.log(response);
             },
             error: function(response) {
                 closePopup("form-sending");
@@ -416,12 +438,12 @@ jQuery(function($) {
                     location.reload();
                 }, 10000);
 
-                console.log(response);
+                // console.log(response);
             }
         });
     }
 
-    function send_failed_form() {
+    function start_scripts() {
 
         popup('failed-mails-sending');
 
@@ -430,18 +452,18 @@ jQuery(function($) {
         // Send video in ajax form
         $.ajax({
             type: 'POST',
-            url: 'send_failed_mail.php',
+            url: 'start_scripts.php',
             data: formData,
             contentType: false,
             processData: false,
             success: function(response) {
                 $('[data-popup="failed-mails-sending"]').removeClass('popup--open');
-                popup('failed-mails-success', 2000);
+                popup('failed-mails-success', 5000);
                 $('.succes-mail-text').html(response);
             },
             error: function(response) {
                 $('[data-popup="failed-mails-sending"]').removeClass('popup--open');
-                popup('failed-mails-error', 2000);
+                popup('failed-mails-error', 5000);
                 $('.failed-mail-text').html(response);
             }
         });

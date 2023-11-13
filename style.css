@@ -542,7 +542,10 @@ body.clients .table-row {
 body.clients .table-row-infos .table-icon {
   color: #e24343;
 }
-body.clients .table-row.table-row-mailSucces .table-row-infos .table-icon {
+body.clients .table-row.table-row-mailSuccess .table-row-infos .table-icon-sendingSuccess {
+  color: #589c51 !important;
+}
+body.clients .table-row.table-row-mailAdminSuccess .table-row-infos .table-icon-sendingAdminSuccess {
   color: #589c51 !important;
 }
 body.clients .table-row > td {
@@ -575,6 +578,9 @@ body.clients .table-row-lang {
 }
 body.clients .table-row-email {
   border-radius: 1.5vw 1.5vw 0 0;
+}
+body.clients .table-row-email:last-child {
+  border-radius: 1.5vw;
 }
 body.clients .table-row-video {
   grid-column: 1/2 !important;
@@ -703,7 +709,20 @@ body.clients .table-row--disabled {
 }
 #takePicture .takePicture-result img {
   margin-bottom: 5vw;
+}
+#takePicture .takePicture-preview {
+  position: relative;
+  width: 100%;
+}
+#takePicture .takePicture-preview video {
+  width: 100%;
   transform: scaleX(-1);
+}
+#takePicture .takePicture-preview-watermark {
+  position: absolute;
+  bottom: 2vw;
+  right: 2vw;
+  width: 20vw;
 }
 #takePicture.takePicture--showResult .takePicture-result {
   opacity: 1;

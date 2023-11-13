@@ -46,8 +46,14 @@ body.clients {
                 color: $failed;
             }
 
-            &.table-row-mailSucces {
-                .table-row-infos .table-icon {
+            &.table-row-mailSuccess {
+                .table-row-infos .table-icon-sendingSuccess {
+                    color: $success!important;
+                }
+            }
+
+            &.table-row-mailAdminSuccess {
+                .table-row-infos .table-icon-sendingAdminSuccess {
                     color: $success!important;
                 }
             }
@@ -85,6 +91,9 @@ body.clients {
 
             &-email {
                 border-radius: $radius $radius 0 0;
+                &:last-child {
+                    border-radius: $radius;
+                }
             }
 
             &-video {

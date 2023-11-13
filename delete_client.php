@@ -36,8 +36,10 @@ if (isset($_POST['id'])) {
         $picturePath = $row['picture_path'];
 
         // Delete associated video
-        if (file_exists($videoPath)) { unlink($videoPath); $video_deleted = true; }
-        if (file_exists($picturePath)) { unlink($picturePath); $picture_deleted = true; }
+        if (file_exists($videoPath)) { unlink($videoPath); $video_deleted = true; }else{ $video_deleted = true; }
+        if (file_exists($picturePath)) { unlink($picturePath); $picture_deleted = true; }else{ $picture_deleted = true; }
+
+        $response .= "Fichiers supprimés. ";
         
     } else {
         $response = "An error occured : " . $query->error;
@@ -46,7 +48,24 @@ if (isset($_POST['id'])) {
     }
 
 
-    // Delete entry where ID is equal the given one
+    // Update the database to clear the URLs
+    $updateQuery = "UPDATE customers SET ";
+    $updateQuery .= $video_deleted ? "video_path = '' " : "";
+    $updateQuery .= $video_deleted && $picture_deleted ? ", " : "";
+    $updateQuery .= $picture_deleted ? "picture_path = '' " : "";
+    $updateQuery .= "WHERE ID = ?";
+    $update = $conn->prepare($updateQuery);
+    $update->bind_param("s", $id);
+
+    if ($update->execute()) {
+        $response .= "Urls de la DB supprimées. ";
+    } else {
+        $response .= "An error occurred during database update: " . $update->error;
+    }
+
+
+    // Delete entry where ID is equal the given one - DISABLED
+    /*
     $deleteQuery = "DELETE FROM customers WHERE ID = ?";
     $query = $conn->prepare($deleteQuery);
     $query->bind_param("s", $id);
@@ -61,6 +80,7 @@ if (isset($_POST['id'])) {
     // Fermer la connexion à la base de données
     $query->close();
     $conn->close();
+    */
 } else {
     $response = "ID is missing from command.";
 }

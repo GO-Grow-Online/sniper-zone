@@ -25,7 +25,27 @@
 
             img {
                 margin-bottom: 5vw;
+                // transform: scaleX(-1);
+            }
+        }
+
+        &-preview {
+
+            position: relative;
+            width: 100%;
+            
+            video {
+                width: 100%;
                 transform: scaleX(-1);
+            }
+
+            &-watermark {
+                position: absolute;
+                bottom: 2vw;
+                right: 2vw;
+
+                width: 20vw;
+
             }
         }
 
