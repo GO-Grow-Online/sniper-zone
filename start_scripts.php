@@ -9,6 +9,7 @@ require_once 'assets/PHPMailer-master/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+$response = "";
 
 $servername = "localhost";
 $username = "Sniper Zone";
@@ -26,7 +27,7 @@ if ($conn->connect_error) {
 }
 
 // Execute query that select all videos from table
-$selectQuery = "SELECT * FROM customers WHERE sending_success = 0";
+$selectQuery = "SELECT * FROM customers WHERE sending_success = 0 OR sending_admin_success = 0";
 $result = $conn->query($selectQuery);
 
 $mail_count = $result->num_rows;
@@ -54,96 +55,105 @@ if ($result->num_rows > 0) {
         $db_update = null;
 
         // Send the email
-        $mail = new PHPMailer();
-        $mail_admin = new PHPMailer();
+        if ($row['sending_success'] == 0) {
 
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPSecure = 'tls'; 
-            $mail->Port = 587;
-            $mail->SMTPAuth = true;
-            $mail->Username = 'noreplysniperzone@gmail.com';
-            $mail->Password = 'zpyl mazf awbf eloq';
-            $mail->isHTML(true);
+            $mail = new PHPMailer();
 
-            // Sender & receiver
-            $mail->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-            $mail->addAddress($customerEmail, 'Client');
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPSecure = 'tls'; 
+                $mail->Port = 587;
+                $mail->SMTPAuth = true;
+                $mail->Username = 'noreplysniperzone@gmail.com';
+                $mail->Password = 'zpyl mazf awbf eloq';
+                $mail->isHTML(true);
 
-            // Mail content
-            $mail->Subject = $mail_subject[$row['lang']];
-            $mail->Body = $mail_message[$row['lang']];
-                        
-            if(isset($picture)) {
-                $mail->addStringAttachment($picture, 'picture.jpg', 'base64', 'image/jpeg');
-            }
+                // Sender & receiver
+                $mail->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
+                $mail->addAddress($customerEmail, 'Client');
 
-            if ($mail->send()) {
-                // Update sending_success value
-                $updateQuery = "UPDATE customers SET sending_success = 1 WHERE ID = ?";
-                $stmt = $conn->prepare($updateQuery);
-                $stmt->bind_param('i', $customerID);
-
-                if ($stmt->execute()) {
-                    $db_update = true;
-                } else {
-                    $db_update = false;
+                // Mail content
+                $mail->Subject = $mail_subject[$row['lang']];
+                $mail->Body = $mail_message[$row['lang']];
+                            
+                if(isset($picture)) {
+                    $mail->addStringAttachment($picture, 'picture.jpg', 'base64', 'image/jpeg');
                 }
 
-                $sended_mails++;
-            } else {
-                $failed_mails++;
-            }
+                if ($mail->send()) {
+                    // Update sending_success value
+                    $updateQuery = "UPDATE customers SET sending_success = 1 WHERE ID = ?";
+                    $stmt = $conn->prepare($updateQuery);
+                    $stmt->bind_param('i', $customerID);
 
+                    if ($stmt->execute()) {
+                        $db_update = true;
+                    } else {
+                        $db_update = false;
+                    }
 
-            // Second mail with video attachment for admin
-            $mail_admin->isSMTP();
-            $mail_admin->Host = 'smtp.gmail.com';
-            $mail_admin->SMTPSecure = 'tls'; 
-            $mail_admin->Port = 587;
-            $mail_admin->SMTPAuth = true;
-            $mail_admin->Username = 'noreplysniperzone@gmail.com';
-            $mail_admin->Password = 'zpyl mazf awbf eloq';
-
-            $mail_admin->isHTML(true);
-
-            $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-            $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
-
-            $mail_admin->Subject = "Borne briefing - Sniper Zone";
-            $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";
-
-            $mail_admin->addAttachment($video, 'video.mp4');
-
-            if ($mail_admin->send()) {
-                // Update sending_success value
-                $updateQuery = "UPDATE customers SET sending_admin_success = 1 WHERE ID = ?";
-                $stmt = $conn->prepare($updateQuery);
-                $stmt->bind_param('i', $customerID);
-
-                if ($stmt->execute()) {
-                    $db_update = true;
+                    $sended_mails++;
                 } else {
-                    $db_update = false;
+                    $failed_mails++;
                 }
-
-                $sended_mails++;
-            } else {
-                $failed_mails++;
+            } catch (Exception $error) {
+                $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
             }
-
-        } catch (Exception $error) {
-            $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
         }
 
-        $response = $sended_mails . " mail(s) envoyé(s). " . $failed_mails . " échec(s).";
-        $response = $sended_mails == 0 ? "Connection internet indisponible. Veuillez réessayer plus tard." : $response;
+
+        if ($row['sending_admin_success'] == 0) {
+            $mail_admin = new PHPMailer();
+
+            // Second mail with video attachment for admin
+            try {
+                $mail_admin->isSMTP();
+                $mail_admin->Host = 'smtp.gmail.com';
+                $mail_admin->SMTPSecure = 'tls'; 
+                $mail_admin->Port = 587;
+                $mail_admin->SMTPAuth = true;
+                $mail_admin->Username = 'noreplysniperzone@gmail.com';
+                $mail_admin->Password = 'zpyl mazf awbf eloq';
+                $mail_admin->isHTML(true);
+
+                $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
+                $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
+
+                $mail_admin->Subject = "Borne briefing - Sniper Zone";
+                $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";
+
+                // $mail_admin->addAttachment($video, 'video.mp4');
+
+                if ($mail_admin->send()) {
+                    // Update sending_success value
+                    $updateQuery = "UPDATE customers SET sending_admin_success = 1 WHERE ID = ?";
+                    $stmt = $conn->prepare($updateQuery);
+                    $stmt->bind_param('i', $customerID);
+
+                    if ($stmt->execute()) {
+                        $db_update = true;
+                    } else {
+                        $db_update = false;
+                    }
+
+                    $sended_mails++;
+                } else {
+                    $failed_mails++;
+                }
+
+            } catch (Exception $error) {
+                $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
+            }
+        }
+
+        $response .= $sended_mails . " mail(s) envoyé(s). " . $failed_mails . " échec(s).";
+        $response .= $sended_mails == 0 ? "Connection internet indisponible. Veuillez réessayer plus tard." : $response;
 
         $response .= $db_update ? "<br/> Tous les clients sont bien à jours." : "" ;
     }
 }else {
-    $response = "Tous les mails ont bien été envoyés.";
+    $response .= "Tous les mails ont bien été envoyés.";
 }
 
 // Delete old db entries
@@ -189,7 +199,7 @@ if ($stmt->execute()) {
                 if (file_exists($picturePath)) { unlink($picturePath); $picture_deleted = true; }
                 
             } else {
-                $response = "An error occured : " . $query->error;
+                $response .= "An error occured : " . $query->error;
                 $video_deleted = false;
                 $picture_deleted = false;
             }

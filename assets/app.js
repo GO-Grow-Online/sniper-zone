@@ -200,8 +200,8 @@ jQuery(function($) {
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
-            source.attr('src', 'assets/medias/video/debug.mp4')
-            // source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+            // source.attr('src', 'assets/medias/video/debug.mp4')
+            source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
         }
         var video_preview = $('#briefing .videoPreview');
         video[0].load();
@@ -235,7 +235,8 @@ jQuery(function($) {
                     }; */
     
                     var mediaRecorder = new MediaRecorder(stream, {
-                        mimeType: 'video/webm; codecs=vp9', // Specify desired video codec
+                        mimeType: 'video/webm; codecs=vp9',
+                        bufferSize: 10240 * 10240
                     });
                     var recordedChunks = [];
             
@@ -244,21 +245,27 @@ jQuery(function($) {
                             recordedChunks.push(event.data);
                         }
                     };
-            
-                    mediaRecorder.onstop = function() {
-                        // Convert recorded video into a blob to make it sendable
-                        video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
-                        
-                        stepChange('askPicture');
-                    };
-    
+
+
+
                     mediaRecorder.start();
-    
+
                     $('#briefing #video').on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
                     });
+
+                    mediaRecorder.onstop = function() {
+                        // Convert recorded video into a blob to make it sendable
+                        video_to_send = new Blob(recordedChunks, { type: 'video/webm' });
+
+                        stepChange('askPicture');
+                    };
+
+
+
+
                 })
                 .catch(function(error) {
                     console.error('Error accessing webcam:', error);
@@ -302,7 +309,7 @@ jQuery(function($) {
             var timer_btn = $(this);
             timer_btn.addClass('timerOn');
 
-            var timer_lenght = 1000;
+            var timer_lenght = 10000;
 
             // Animate a progression bar for popup
             var startTime = Date.now();
@@ -373,7 +380,7 @@ jQuery(function($) {
     function step_ask_mail() {
 
         var form = $('#email .email-form');
-        var email_field = form.find('input');
+        var email_field = $('#email_field');
 
         form.find('.btn--confirm').on('click', function() {
 

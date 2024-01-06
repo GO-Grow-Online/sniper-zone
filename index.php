@@ -78,6 +78,14 @@
                 <input name="email" id="email_field" type="text"/>
 
                 <button class="btn btn-round btn--confirm"><svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L6 12L1 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+                <div class="email-text small">
+                    <p data-trad="fr">En acceptant de recevoir cette photo, vous vous inscrivez à notre Newsletter.</p>
+                    <p data-trad="de">Durch das Akzeptieren dieses Fotos melden Sie sich für unseren Newsletter an.</p>
+                    <p data-trad="en">By accepting to receive this photo, you are subscribing to our newsletter.</p>
+                    <p data-trad="nl">Door deze foto te accepteren, schrijft u zich in voor onze nieuwsbrief.</p>
+                </div>
+
             </div>
         </section>
 

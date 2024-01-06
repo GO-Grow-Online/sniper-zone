@@ -9,6 +9,8 @@
     user-select: none;
     transition: opacity 0.3s ease;
 
+    z-index: 10000;
+
     pointer-events: all;
 
     backdrop-filter: blur(1vw);

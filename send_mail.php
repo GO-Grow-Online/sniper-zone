@@ -87,9 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
 
             $mail_admin->Subject = "Borne briefing - Sniper Zone";
-            $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";
+            $mail_admin->Body = "Un nouveau client à utilisé la borne ! <br/> Voici son email : '" . $customerEmail . "' <br/> La preuve de vision du briefing sera disponible sur la borne durant 2 mois !";
 
-            $mail_admin->addAttachment($video['tmp_name'], $video['name']);
+            // $mail_admin->addAttachment($video['tmp_name'], $video['name']);
 
             if ($mail_admin->send()) {
                 $response .=  "Mail administrateur envoyé avec succès.";
@@ -102,6 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } catch (Exception $error) {
             $response =  "Erreur lors de l'envoi de l'e-mail : " . $error->getMessage();
         }
+
+
+
 
         // Save file locally
         move_uploaded_file($video['tmp_name'], $videoPath);

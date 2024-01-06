@@ -198,7 +198,7 @@ body.loading .loadingScreen {
   height: 100%;
 }
 .btn-round svg.timer-svg circle {
-  fill: #595659;
+  fill: #589c51;
 }
 .btn-round.btn-small {
   width: 7.5vw;
@@ -385,6 +385,7 @@ h1, .h1, h2, .h2 {
   background: rgba(37, 36, 37, 0.8823529412);
   user-select: none;
   transition: opacity 0.3s ease;
+  z-index: 10000;
   pointer-events: all;
   backdrop-filter: blur(1vw);
   opacity: 1;
