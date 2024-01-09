@@ -34,6 +34,16 @@
 </head>
 <body data-lang="fr">
 
+    <div class="loadingScreen">
+        <div class="loadingScreen-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.25V4.75M12 18V22M18.25 12H21.75M2.75 12H4.25M5.54289 18.4571L6.25 17.75M5.33579 5.41579L6.75 6.83M19.0784 19.0784L16.25 16.25M18.8713 5.20868L16.75 7.33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            <span class="loadingScreen-indicator-value"></span>
+        </div>
+    </div>
+
     <main>
   
         <section id="selectLang" class="current">
