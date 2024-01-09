@@ -128,6 +128,7 @@ jQuery(function($) {
                 if (videosToLoad === 0) {
                     // Fermer l'écran de chargement
                     console.log("Vidéos déjà chargées.");
+                    $('.loadingScreen-indicator-value').text("Vidéos déjà chargées.");
                     $('body').removeClass('loading');
                 }
             } else {
@@ -148,6 +149,7 @@ jQuery(function($) {
                         if (videosToLoad === 0) {
                             // Fermer l'écran de chargement
                             console.log("Vidéos ajoutées au localStorage.");
+                            $('.loadingScreen-indicator-value').text(video.path + "ajoutée");
                             $('body').removeClass('loading');
                         }
                     };
