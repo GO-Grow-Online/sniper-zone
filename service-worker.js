@@ -41,7 +41,7 @@ const urlsToCache = [
     // Scripts & styles
     '/assets/jquery.js',
     '/assets/app.js',
-    'style.css',
+    '/style.css',
 ];
 
 self.addEventListener('install', (event) => {
