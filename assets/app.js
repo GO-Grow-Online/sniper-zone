@@ -59,7 +59,11 @@ jQuery(function($) {
                     if (response) {
                         console.log('La vidéo est en cache!');
                     } else {
-                        console.log('Mise en cache des vidéos!');
+
+                        console.log('Mise en cache de la vidéo.');
+                        
+                        updateProgress();
+
                         cache.add(url).then(function() {
                             console.log('Vidéo ajoutée au cache:', url);
                             updateProgress();
