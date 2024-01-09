@@ -44,7 +44,7 @@ jQuery(function($) {
                         console.log('La vidéo est en cache!');
                     } else {
                         console.log('La vidéo n\'est pas en cache.');
-                        loadApp();
+                        // loadApp();
                     }
                 });
             });
