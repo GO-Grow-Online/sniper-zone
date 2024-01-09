@@ -630,8 +630,8 @@ body.clients .table-row--disabled {
   bottom: 5vw;
   left: 5vw;
 }
-#briefing #video {
-  width: 100%;
+#briefing video {
+  width: 100;
   height: 100%;
   border-radius: 0;
   object-fit: contain;
