@@ -83,19 +83,19 @@
 
             <video autoplay class="videoPreview"></video>
 
-            <video preload="auto" id="video-fr" style="display: none;">
+            <video preload="auto" id="video-fr" data-lang="fr">
                 <source src="/assets/medias/video/briefing-fr.mp4" type="video/mp4">
             </video>
 
-            <video preload="auto" id="video-de" style="display: none;">
+            <video preload="auto" id="video-de" data-lang="de">
                 <source src="/assets/medias/video/briefing-de.mp4" type="video/mp4">
             </video>
 
-            <video preload="auto" id="video-en" style="display: none;">
+            <video preload="auto" id="video-en" data-lang="en">
                 <source src="/assets/medias/video/briefing-en.mp4" type="video/mp4">
             </video>
 
-            <video preload="auto" id="video-nl" style="display: none;">
+            <video preload="auto" id="video-nl" data-lang="nl">
                 <source src="/assets/medias/video/briefing-nl.mp4" type="video/mp4">
             </video>
 
