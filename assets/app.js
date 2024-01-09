@@ -101,7 +101,7 @@ jQuery(function($) {
 
     }
 
-    /*
+    
     function loadApp() {
         var videos = [
             { path: '../assets/medias/video/briefing-de.mp4' },
@@ -168,8 +168,7 @@ jQuery(function($) {
             }
         });
     }
-    */
-   
+
     function base64toBlob(base64Data) {
         var sliceSize = 1024;
         var byteCharacters = atob(base64Data);
