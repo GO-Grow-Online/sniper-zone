@@ -8,15 +8,13 @@ jQuery(function($) {
     delete_client();
     virtual_keyboard();
     stepPrevious();
+ 
+    init_pwa()
 
-    // init_pwa()
-
-    loadApp();
+    // loadApp();
 
     // send_form();
     // popup();
-    // loadApp();
-    // loadApp_2();
 
     var video_to_send = null;
     var group_picture_to_send = null;
@@ -103,6 +101,7 @@ jQuery(function($) {
 
     }
 
+    /*
     function loadApp() {
         var videos = [
             { path: '../assets/medias/video/briefing-de.mp4' },
@@ -169,7 +168,8 @@ jQuery(function($) {
             }
         });
     }
-    
+    */
+   
     function base64toBlob(base64Data) {
         var sliceSize = 1024;
         var byteCharacters = atob(base64Data);

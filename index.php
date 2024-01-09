@@ -19,7 +19,6 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- PWA -->
-    <!--
     <link rel="manifest" href="/manifest.json">
     <script>
     if ('serviceWorker' in navigator) {
@@ -32,7 +31,6 @@
         });
     }
   </script>
-  -->
 </head>
 <body data-lang="fr" class="loading">
 
