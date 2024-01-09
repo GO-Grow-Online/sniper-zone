@@ -148,13 +148,13 @@ jQuery(function($) {
     function step_select_lang() {
         $('#selectLang .btn--lang').on('click', function() {
             let delay = 4000;
-            let lang = $(this).attr('data-lang');
-            $('body').attr('data-lang', lang);
-            $('html').attr('lang', lang);
+            selected_lang = $(this).attr('data-lang');
+            $('body').attr('data-lang', selected_lang);
+            $('html').attr('lang', selected_lang);
 
-            var videoPath = '../assets/medias/video/briefing-' + lang + '.mp4';
+            var videoPath = '../assets/medias/video/briefing-' + selected_lang + '.mp4';
 
-            $('#video-' + lang)[0].src = videoPath;
+            $('#video-' + selected_lang)[0].src = videoPath;
 
             
             popup("brief-begin", delay);
