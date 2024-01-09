@@ -202,8 +202,8 @@ jQuery(function($) {
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
             // source.attr('src', 'assets/medias/video/debug.mp4')
-            $('video-' + selected_lang).fadeIn();
             // source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+            $('video-' + selected_lang).fadeIn();
         }
         var video_preview = $('#briefing .videoPreview');
         video[0].load();
