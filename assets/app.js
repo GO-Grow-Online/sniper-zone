@@ -72,12 +72,20 @@ jQuery(function($) {
         videoUrls.forEach(function(url) {
             var video = document.createElement('video');
             video.src = url;
-            video.addEventListener('loadeddata', function() {
+            if (video.readyState === 4) {
                 console.log('Vidéo chargée:', url);
                 cacheVideo(url);
 
                 video.remove();
-            });
+
+            }
+
+            // video.addEventListener('loadeddata', function() {
+            //     console.log('Vidéo chargée:', url);
+            //     cacheVideo(url);
+            // 
+            //     video.remove();
+            // });
         });
     
         // Masquer l'écran de chargement une fois la mise en cache terminée
