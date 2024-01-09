@@ -197,13 +197,13 @@ jQuery(function($) {
 
 
         // Change to briefing explaination and ask email after
-        let video = $('#briefing #video-' + selected_lang);
+        let video = $('#video-' + selected_lang);
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
             // source.attr('src', 'assets/medias/video/debug.mp4')
             // source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
-            $('#video-' + selected_lang).fadeIn();
+            video.fadeIn();
         }
         var video_preview = $('#briefing .videoPreview');
         video[0].load();
