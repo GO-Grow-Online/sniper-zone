@@ -4,9 +4,9 @@ self.addEventListener('install', function(event) {
       caches.open('my-cache').then(function(cache) {
         return cache.addAll([
           '/',
-          '/styles.css',
-          '/script.js',
-          '/images/logo.png',
+          '/style.css',
+          '/assets/app.js',
+          '/medias/images/bg.jpg',
           '/videos/briefing-de.mp4',
           '/videos/briefing-fr.mp4',
           '/videos/briefing-nl.mp4',
