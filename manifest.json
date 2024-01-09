@@ -1,6 +1,6 @@
 {
-    "name": "Mon Site",
-    "short_name": "Site",
+    "name": "Sniper Zone",
+    "short_name": "sniper-zone",
     "description": "Description de mon site",
     "start_url": "/",
     "display": "standalone",

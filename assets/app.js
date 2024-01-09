@@ -8,6 +8,9 @@ jQuery(function($) {
     delete_client();
     virtual_keyboard();
     stepPrevious();
+
+    init_pwa()
+
     // send_form();
     // popup();
     // loadApp();
@@ -21,7 +24,7 @@ jQuery(function($) {
     var previousStepId = null;
 
     
-    function ini_pwa(params) {
+    function init_pwa(params) {
         var cacheName = 'my-cache';
         
         // Files to verifiy
