@@ -27,9 +27,8 @@ jQuery(function($) {
     
     function init_pwa(params) {
 
-
         var cacheName = 'my-cache';
-        
+    
         // Fichiers à vérifier
         var videoUrls = [
             '/assets/medias/video/briefing-de.mp4', 
@@ -37,73 +36,59 @@ jQuery(function($) {
             '/assets/medias/video/briefing-fr.mp4', 
             '/assets/medias/video/briefing-nl.mp4', 
         ];
-
+    
         var progressBar = $('.loadingScreen-indicator-value');
-        var toLoad = videoUrls.length;
+
         var progressStep = 100 / videoUrls.length;
         var currentProgress = 0;
-
+    
         function updateProgress() {
             currentProgress += progressStep;
             progressBar.text(currentProgress + '%');
         }
-
-
-
-        // Vérifier si les fichiers sont en cache
-        caches.open(cacheName).then(function(cache) {
-            $.each(videoUrls, function(index, url) {   
-
-                console.log(toLoad);
-                      
+    
+        function cacheVideo(url) {
+            caches.open(cacheName).then(function(cache) {
                 cache.match(url).then(function(response) {
-                    if (response) {
-                        console.log('La vidéo est en cache!');
-                    } else {
-
-                        console.log('Mise en cache de la vidéo : ' + toLoad);
-
+                    if (!response) {
+                        // Si la vidéo n'est pas en cache, l'ajouter
                         cache.add(url).then(function() {
                             console.log('Vidéo ajoutée au cache:', url);
                             updateProgress();
-                            toLoad--;
-
-                            // console.log(toLoad);
-
-                            if (toLoad == 0) {
-                                $('body').removeClass('loading');
-                            }
                         }).catch(function(error) {
-                            console.error('Erreur lors de l\'ajout de la vidéo '+ toLoad +' au cache:', error);
+                            console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
                         });
+                    } else {
+                        console.log('La vidéo est déjà en cache:', url);
+                        updateProgress();
                     }
                 }).catch(function(error) {
-                    console.error('Erreur lors de la mise en cache des vidéos:', error);
-                });;
-            });
-        });
-
-        // Vérifier si les fichiers sont en cache
-        caches.open(cacheName).then(function(cache) {
-            var cachePromises = videoUrls.map(function(url) {
-                return cache.match(url).then(function(response) {
-                    if (!response) {
-                        // Si la vidéo n'est pas en cache, l'ajouter
-                        return cache.add(url);
-                    }
+                    console.error('Erreur lors de la mise en cache de la vidéo:', error);
                 });
             });
+        }
+    
+        // Charger chaque vidéo une première fois
+        videoUrls.forEach(function(url) {
+            var video = document.createElement('video');
+            video.src = url;
+            video.css('display', 'none');
+            video.addEventListener('loadedmetadata', function() {
+                console.log('Vidéo chargée:', url);
+                cacheVideo(url);
 
-            // Attendre que toutes les promesses de cache soient résolues
-            return Promise.all(cachePromises);
-        }).then(function() {
-            // Cacher l'écran de chargement une fois la mise en cache terminée
+                video.remove();
+            });
+        });
+    
+        // Masquer l'écran de chargement une fois la mise en cache terminée
+        Promise.all(videoUrls.map(cacheVideo)).then(function() {
             $('#loader-container').hide();
         }).catch(function(error) {
             console.error('Erreur lors de la mise en cache des vidéos:', error);
             // Gérer les erreurs si nécessaire
         });
-
+        
     }
 
     
