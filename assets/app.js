@@ -72,7 +72,6 @@ jQuery(function($) {
         videoUrls.forEach(function(url) {
             var video = document.createElement('video');
             video.src = url;
-            video.style('display', 'none');
             video.addEventListener('loadedmetadata', function() {
                 console.log('Vidéo chargée:', url);
                 cacheVideo(url);
