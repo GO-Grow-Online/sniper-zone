@@ -9,7 +9,7 @@ jQuery(function($) {
     virtual_keyboard();
     stepPrevious();
  
-    init_pwa()
+    // init_pwa()
 
     // loadApp();
 
@@ -36,7 +36,33 @@ jQuery(function($) {
             '/assets/medias/video/briefing-fr.mp4', 
             '/assets/medias/video/briefing-nl.mp4', 
         ];
-    
+
+        // Nom du cache que vous avez défini dans votre service worker
+        var cacheName = 'my-cache';
+
+        // Nom de la vidéo que vous souhaitez vérifier
+        var videoUrl = '/videos/video1.mp4';
+
+        // Vérifier si la vidéo est en cache
+        $.each(videoUrls, function (index, videoUrl) {
+            caches.open(cacheName).then(function (cache) {
+                cache.match(videoUrl).then(function (response) {
+                    if (response) {
+                        console.log('La vidéo ' + videoUrl + ' est en cache!');
+                    } else {
+                        console.log('La vidéo ' + videoUrl + ' n\'est pas en cache.');
+
+                        cache.add(videoUrl).then(function () {
+                            console.log('La vidéo ' + videoUrl + ' a été ajoutée au cache avec succès.');
+                        }).catch(function (error) {
+                            console.error('Erreur lors de l\'ajout de la vidéo ' + videoUrl + ' au cache: ', error);
+                        });    
+                    }
+                });
+            });
+        });
+        
+        /*
         var progressBar = $('.loadingScreen-indicator-value');
 
         var progressStep = 100 / videoUrls.length;
@@ -66,6 +92,8 @@ jQuery(function($) {
                     console.error('Erreur lors de la mise en cache de la vidéo:', error);
                 });
             });
+
+            */
         }
     
         // Charger chaque vidéo une première fois
