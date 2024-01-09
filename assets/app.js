@@ -8,10 +8,8 @@ jQuery(function($) {
     delete_client();
     virtual_keyboard();
     stepPrevious();
- 
-    // init_pwa()
 
-    // loadApp();
+    init_app();
 
     // send_form();
     // popup();
@@ -23,191 +21,19 @@ jQuery(function($) {
 
     var previousStepId = null;
 
-
-    
-    function init_pwa(params) {
-
-        var cacheName = 'my-cache';
-    
-        // Fichiers à vérifier
-        var videoUrls = [
-            '/assets/medias/video/briefing-de.mp4', 
-            '/assets/medias/video/briefing-en.mp4', 
-            '/assets/medias/video/briefing-fr.mp4', 
-            '/assets/medias/video/briefing-nl.mp4', 
-        ];
-
-        var loop = videoUrls.length;
-
-        // Nom du cache que vous avez défini dans votre service worker
-        var cacheName = 'my-cache';
-
-        // Vérifier si la vidéo est en cache
-        $.each(videoUrls, function (index, videoUrl) {
-
-            caches.open(cacheName).then(function (cache) {
-                cache.match(videoUrl).then(function (response) {
-                    if (response) {
-                        console.log('La vidéo ' + videoUrl + ' est en cache!');
-                    } else {
-                        console.log('La vidéo ' + videoUrl + ' n\'est pas en cache.');
-
-                        cache.add(videoUrl).then(function () {
-                            console.log('La vidéo ' + videoUrl + ' a été ajoutée au cache avec succès.');
-                        }).catch(function (error) {
-                            console.error('Erreur lors de l\'ajout de la vidéo ' + videoUrl + ' au cache: ', error);
-                        });    
-                    }
-                });
-            });
+    function init_app() {
+        window.addEventListener('offline', () => {
+            console.log('You are offline. Loading from cache...');
         });
         
-        /*
-        var progressBar = $('.loadingScreen-indicator-value');
-
-        var progressStep = 100 / videoUrls.length;
-        var currentProgress = 0;
-    
-        function updateProgress() {
-            currentProgress += progressStep;
-            progressBar.text(currentProgress + '%');
-        }
-    
-        function cacheVideo(url) {
-            caches.open(cacheName).then(function(cache) {
-                cache.match(url).then(function(response) {
-                    if (!response) {
-                        // Si la vidéo n'est pas en cache, l'ajouter
-                        cache.add(url).then(function() {
-                            console.log('Vidéo ajoutée au cache:', url);
-                            updateProgress();
-                        }).catch(function(error) {
-                            console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
-                        });
-                    } else {
-                        console.log('La vidéo est déjà en cache:', url);
-                        updateProgress();
-                    }
-                }).catch(function(error) {
-                    console.error('Erreur lors de la mise en cache de la vidéo:', error);
-                });
-            });
-
-        }
-    
-        // Charger chaque vidéo une première fois
-        videoUrls.forEach(function(url) {
-            var video = document.createElement('video');
-            video.src = url;
-            
-            video.addEventListener('loadeddata', function() {
-                
-                if(video.readyState >= 3){
-                    console.log('Vidéo chargée:', url);
-                    cacheVideo(url);
-                    $('body').removeClass('loading');
-                    // video.remove();
-                }
-             
-            });
-        });
-    
-        // Masquer l'écran de chargement une fois la mise en cache terminée
-        Promise.all(videoUrls.map(cacheVideo)).then(function() {
-            $('#loader-container').hide();
-        }).catch(function(error) {
-            console.error('Erreur lors de la mise en cache des vidéos:', error);
-            // Gérer les erreurs si nécessaire
-        });
-            */
-        
-    }
-
-    
-    function loadApp() {
-        var videos = [
-            { path: '../assets/medias/video/briefing-de.mp4' },
-            { path: '../assets/medias/video/briefing-fr.mp4' },
-            { path: '../assets/medias/video/briefing-en.mp4' },
-            { path: '../assets/medias/video/briefing-nl.mp4' }
-        ];
-    
-        var maVideo = $('#video')[0];
-        
-        var videosToLoad = videos.length;
-    
-        videos.forEach(function(video) {
-            var videoData = localStorage.getItem(video.path);
-            
-            // Video found in localStorage
-            if (videoData) {
-                var blob = base64toBlob(videoData);
-                var videoURL = URL.createObjectURL(blob);
-                maVideo.src = videoURL;
-                videosToLoad--;
-    
-                // Vérifier si toutes les vidéos ont été chargées
-                if (videosToLoad === 0) {
-                    // Fermer l'écran de chargement
-                    $('.loadingScreen-indicator-value').text("Vidéos déjà chargées.");
-                    $('body').removeClass('loading');
-                }
-
-            // No video in localStorage
-            } else {
-                var xhr = new XMLHttpRequest();
-
-                // Placez xhr.onload avant d'ouvrir la requête
-                xhr.onload = function() {
-                    var reader = new FileReader();
-    
-                    console.log('Pxhr.onload');
-                    reader.onloadend = function() {
-    
-                        console.log('reader.onloadend');
-    
-                        var base64Data = reader.result.split(',')[1];
-                        localStorage.setItem(video.path, base64Data);
-                        maVideo.src = "data:video/mp4;base64," + base64Data;
-    
-                        // Vérifier si toutes les vidéos ont été chargées
-                        videosToLoad--;
-                        console.log("Ajouté au storage" + video.path);
-                        if (videosToLoad === 0) {
-                            // Fermer l'écran de chargement
-                            $('.loadingScreen-indicator-value').text(video.path + "ajoutée");
-                            $('body').removeClass('loading');
-                        }
-                    };
-                    reader.readAsDataURL(xhr.response);
-                };
-    
-                xhr.open('GET', video.path, true);
-                xhr.responseType = 'blob';
-                
-                console.log('Pas de vidéos dans le localStorage.');
-                xhr.send();
-            }
+        window.addEventListener('online', () => {
+            console.log('You are online.');
         });
     }
+    
 
-    function base64toBlob(base64Data) {
-        var sliceSize = 1024;
-        var byteCharacters = atob(base64Data);
-        var byteArrays = [];
 
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            var byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-        }
 
-        return new Blob(byteArrays, { type: 'video/mp4' });
-    }
     
     function stepChange(nextStep) {
         var previousStep = $('section.current');
