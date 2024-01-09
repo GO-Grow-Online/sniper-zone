@@ -5,16 +5,16 @@ const urlsToCache = [
 
     // Favicon
     '/',
-    '/assets/favicon/android-chrome-192x192.png',
-    '/assets/favicon/android-chrome-512x512.png',
-    '/assets/favicon/apple-touch-icon.png',
-    '/assets/favicon/browserconfig.xml',
-    '/assets/favicon/favicon-16x16.png',
-    '/assets/favicon/favicon-32x32.png',
-    '/assets/favicon/favicon.ico',
-    '/assets/favicon/mstile-150x150.png',
-    '/assets/favicon/safari-pinned-tab.svg',
-    '/assets/favicon/site.webmanifest',
+    'assets/favicon/android-chrome-192x192.png',
+    'assets/favicon/android-chrome-512x512.png',
+    'assets/favicon/apple-touch-icon.png',
+    'assets/favicon/browserconfig.xml',
+    'assets/favicon/favicon-16x16.png',
+    'assets/favicon/favicon-32x32.png',
+    'assets/favicon/favicon.ico',
+    'assets/favicon/mstile-150x150.png',
+    'assets/favicon/safari-pinned-tab.svg',
+    'assets/favicon/site.webmanifest',
 
     /*
     // Fonts
