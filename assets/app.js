@@ -30,15 +30,6 @@ jQuery(function($) {
     function init_pwa(params) {
 
 
-        var progressBar = $('.loadingScreen-indicator-value');
-        var progressStep = 100 / videoUrls.length;
-        var currentProgress = 0;
-
-        function updateProgress() {
-            currentProgress += progressStep;
-            progressBar.text(currentProgress + '%');
-        }
-
         var cacheName = 'my-cache';
         
         // Fichiers à vérifier
@@ -48,6 +39,17 @@ jQuery(function($) {
             '/assets/medias/video/briefing-fr.mp4', 
             '/assets/medias/video/briefing-nl.mp4', 
         ];
+
+        var progressBar = $('.loadingScreen-indicator-value');
+        var progressStep = 100 / videoUrls.length;
+        var currentProgress = 0;
+
+        function updateProgress() {
+            currentProgress += progressStep;
+            progressBar.text(currentProgress + '%');
+        }
+
+
 
         // Vérifier si les fichiers sont en cache
         caches.open(cacheName).then(function(cache) {
