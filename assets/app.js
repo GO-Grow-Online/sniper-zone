@@ -39,6 +39,7 @@ jQuery(function($) {
         ];
 
         var progressBar = $('.loadingScreen-indicator-value');
+        var toLoad = videoUrls.length;
         var progressStep = 100 / videoUrls.length;
         var currentProgress = 0;
 
@@ -65,13 +66,18 @@ jQuery(function($) {
                         cache.add(url).then(function() {
                             console.log('Vidéo ajoutée au cache:', url);
                             updateProgress();
+                            toLoad--;
+
+                            console.log(toLoad);
+
+                            if (toLoad == 0) {
+                                $('body').removeClass('loading');
+                            }
                         }).catch(function(error) {
                             console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
                         });
                         // loadApp();
                     }
-                }).then(function() {
-                    $('body').removeClass('loading');
                 }).catch(function(error) {
                     console.error('Erreur lors de la mise en cache des vidéos:', error);
                 });;
