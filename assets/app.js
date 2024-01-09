@@ -154,7 +154,7 @@ jQuery(function($) {
 
             var videoPath = '../assets/medias/video/briefing-' + lang + '.mp4';
 
-            $('#video')[0].src = videoPath;
+            $('#video-' + lang)[0].src = videoPath;
 
             
             popup("brief-begin", delay);
