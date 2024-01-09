@@ -6,14 +6,13 @@ self.addEventListener('install', function(event) {
         return cache.addAll([
 
           '/style.css',
-          '/assets/app.js',
 
           '/assets/medias/images/bg.jpg',
 
-          '/assets/medias/videos/briefing-de.mp4',
-          '/assets/medias/videos/briefing-fr.mp4',
-          '/assets/medias/videos/briefing-nl.mp4',
-          '/assets/medias/videos/briefing-en.mp4'
+          '/assets/medias/video/briefing-de.mp4',
+          '/assets/medias/video/briefing-fr.mp4',
+          '/assets/medias/video/briefing-nl.mp4',
+          '/assets/medias/video/briefing-en.mp4'
         ]);
       })
     );
