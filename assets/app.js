@@ -11,6 +11,8 @@ jQuery(function($) {
 
     init_pwa()
 
+    // loadApp();
+
     // send_form();
     // popup();
     // loadApp();
@@ -37,8 +39,8 @@ jQuery(function($) {
 
         // Vérifier si les fichiers sont en cache
         caches.open(cacheName).then(function(cache) {
-            $.each(videoUrls, function(index, url) {       
-                console.log(url);         
+            $.each(videoUrls, function(index, url) {     
+                      
                 cache.match(url).then(function(response) {
                     if (response) {
                         console.log('La vidéo est en cache!');
@@ -51,52 +53,104 @@ jQuery(function($) {
                         // loadApp();
                     }
                 });
+            }).then(function() {
+                $('body').removeClass('loading');
+            }).catch(function(error) {
+                console.error('Erreur lors de la mise en cache des vidéos:', error);
+            });;
+        });
+
+        // Vérifier si les fichiers sont en cache
+        caches.open(cacheName).then(function(cache) {
+            var cachePromises = videoUrls.map(function(url) {
+                return cache.match(url).then(function(response) {
+                    if (!response) {
+                        // Si la vidéo n'est pas en cache, l'ajouter
+                        return cache.add(url);
+                    }
+                });
             });
+
+            // Attendre que toutes les promesses de cache soient résolues
+            return Promise.all(cachePromises);
+        }).then(function() {
+            // Cacher l'écran de chargement une fois la mise en cache terminée
+            $('#loader-container').hide();
+        }).catch(function(error) {
+            console.error('Erreur lors de la mise en cache des vidéos:', error);
+            // Gérer les erreurs si nécessaire
         });
 
     }
 
-    function loadApp_2() {
-        var video = $('#video');
-        video[0].play();
-    }
-
     function loadApp() {
-        var video = $('#video');
-        var sources = video.find('source');
-        var totalSources = sources.length;
-        var loadedSources = 0;
-
-        if (video.length) {
-            sources.each(function() {
-                let source = $(this);
-                var video_url = $(this).attr('data-src');
-
+        var videos = [
+            { path: '../assets/medias/video/briefing-de.mp4' },
+            { path: '../assets/medias/video/briefing-fr.mp4' },
+            { path: '../assets/medias/video/briefing-en.mp4' },
+            { path: '../assets/medias/video/briefing-nl.mp4' }
+        ];
+    
+        var maVideo = $('#video')[0];
+        
+        var videosToLoad = videos.length;
+    
+        videos.forEach(function(video) {
+            var videoData = localStorage.getItem(video.path);
+    
+            if (videoData) {
+                var blob = base64toBlob(videoData);
+                var videoURL = URL.createObjectURL(blob);
+                maVideo.src = videoURL;
+                videosToLoad--;
+    
+                // Vérifier si toutes les vidéos ont été chargées
+                if (videosToLoad === 0) {
+                    // Fermer l'écran de chargement
+                    // ...
+                }
+            } else {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', video_url, true);
+                xhr.open('GET', video.path, true);
                 xhr.responseType = 'blob';
-                
-                // Get and display current download progress
-                xhr.onprogress = function(event) {
-                    if (event.lengthComputable) {
-                        var progress = Math.floor((event.loaded / event.total) * 100);
-                        $('.loadingScreen-indicator-value').text(progress);
-                    }
-                };
-
-                // Hide loading screen
+    
                 xhr.onload = function() {
-                    loadedSources++;
-
-                    if (loadedSources === totalSources) {
-                        $('body').removeClass('loading');
-                        // console.log('Toutes les vidéos ont été chargées.');
-                    }
+                    var reader = new FileReader();
+                    reader.onloadend = function() {
+                        var base64Data = reader.result.split(',')[1];
+                        localStorage.setItem(video.path, base64Data);
+                        maVideo.src = "data:video/mp4;base64," + base64Data;
+    
+                        // Vérifier si toutes les vidéos ont été chargées
+                        videosToLoad--;
+                        if (videosToLoad === 0) {
+                            // Fermer l'écran de chargement
+                            // ...
+                        }
+                    };
+                    reader.readAsDataURL(xhr.response);
                 };
-
                 xhr.send();
-            });
+            }
+        });
+    }
+    
+    function base64toBlob(base64Data) {
+        var sliceSize = 1024;
+        var byteCharacters = atob(base64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
         }
+
+        return new Blob(byteArrays, { type: 'video/mp4' });
     }
     
     function stepChange(nextStep) {
@@ -217,12 +271,31 @@ jQuery(function($) {
 
             selected_lang = lang;
 
-            // Load video in right language
+            // Construction de l'URL de la vidéo en fonction de la langue sélectionnée
+            var videoPath = '../assets/medias/video/briefing-' + selected_lang + '.mp4';
+
+            // Get video from local storage
+            var maVideo = $('#video')[0];
+            var videoData = localStorage.getItem(videoPath);
+
+            if (videoData) {
+
+                // Load video in right language
+                var blob = base64toBlob(videoData);
+                var videoURL = URL.createObjectURL(blob);
+                maVideo.src = videoURL;
+
+                popup("brief-begin", delay);
+                setTimeout(() => {
+                    step_briefing();
+                }, delay);
+            } else {
+                console.error('La vidéo pour la langue sélectionnée n\'a pas été préalablement chargée.');
+            }
+
+
             let delay = 4000;
-            popup("brief-begin", delay);
-            setTimeout(() => {
-                step_briefing();
-            }, delay);
+            
         });
     }
 
