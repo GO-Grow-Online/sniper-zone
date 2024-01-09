@@ -9,9 +9,9 @@ jQuery(function($) {
     virtual_keyboard();
     stepPrevious();
  
-    // init_pwa()
+    init_pwa()
 
-    loadApp();
+    // loadApp();
 
     // send_form();
     // popup();
