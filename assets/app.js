@@ -123,6 +123,8 @@ jQuery(function($) {
                 var videoURL = URL.createObjectURL(blob);
                 maVideo.src = videoURL;
                 videosToLoad--;
+
+                console.log(videosToLoad);
     
                 // Vérifier si toutes les vidéos ont été chargées
                 if (videosToLoad === 0) {
