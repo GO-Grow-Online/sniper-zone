@@ -3,6 +3,12 @@
 const CACHE_NAME = 'sniperzone-cache-v1';
 const urlsToCache = [
 
+    // Videos
+    '/assets/medias/video/briefing-de.mp4',
+    '/assets/medias/video/briefing-en.mp4',
+    '/assets/medias/video/briefing-fr.mp4',
+    '/assets/medias/video/briefing-nl.mp4',
+
     // Favicon
     '/',
     '/assets/favicon/android-chrome-192x192.png',
@@ -31,12 +37,6 @@ const urlsToCache = [
     '/assets/medias/image/fr_flag.svg',
     '/assets/medias/image/logo.png',
     '/assets/medias/image/nl_flag.svg',
-
-    // Videos
-    '/assets/medias/video/briefing-de.mp4',
-    '/assets/medias/video/briefing-en.mp4',
-    '/assets/medias/video/briefing-fr.mp4',
-    '/assets/medias/video/briefing-nl.mp4',
 
     // Scripts & styles
     '/assets/jquery.js',
