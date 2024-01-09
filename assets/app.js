@@ -29,10 +29,10 @@ jQuery(function($) {
         
         // Fichiers à vérifier
         var videoUrls = [
-            '../assets/medias/video/briefing-de.mp4', 
-            '../assets/medias/video/briefing-en.mp4', 
-            '../assets/medias/video/briefing-fr.mp4', 
-            '../assets/medias/video/briefing-nl.mp4', 
+            '/assets/medias/video/briefing-de.mp4', 
+            '/assets/medias/video/briefing-en.mp4', 
+            '/assets/medias/video/briefing-fr.mp4', 
+            '/assets/medias/video/briefing-nl.mp4', 
         ];
 
         // Vérifier si les fichiers sont en cache
