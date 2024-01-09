@@ -59,8 +59,9 @@ jQuery(function($) {
                     }
                 });
             });
-            
+
             loop--;
+            console.log(loop);
             if(loop == 0) {
                 $('body').removeClass('loading');
             }
