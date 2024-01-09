@@ -5,18 +5,17 @@ const urlsToCache = [
 
     // Favicon
     '/',
-    'assets/favicon/android-chrome-192x192.png',
-    'assets/favicon/android-chrome-512x512.png',
-    'assets/favicon/apple-touch-icon.png',
-    'assets/favicon/browserconfig.xml',
-    'assets/favicon/favicon-16x16.png',
-    'assets/favicon/favicon-32x32.png',
-    'assets/favicon/favicon.ico',
-    'assets/favicon/mstile-150x150.png',
-    'assets/favicon/safari-pinned-tab.svg',
-    'assets/favicon/site.webmanifest',
+    '/assets/favicon/android-chrome-192x192.png',
+    '/assets/favicon/android-chrome-512x512.png',
+    '/assets/favicon/apple-touch-icon.png',
+    '/assets/favicon/browserconfig.xml',
+    '/assets/favicon/favicon-16x16.png',
+    '/assets/favicon/favicon-32x32.png',
+    '/assets/favicon/favicon.ico',
+    '/assets/favicon/mstile-150x150.png',
+    '/assets/favicon/safari-pinned-tab.svg',
+    '/assets/favicon/site.webmanifest',
 
-    /*
     // Fonts
     '/assets/fonts/urbanist-black-italic.ttf',
     '/assets/fonts/urbanist-black.ttf',
@@ -43,15 +42,14 @@ const urlsToCache = [
     '/assets/jquery.js',
     '/assets/app.js',
     '/style.css',
-    */
 ];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
-            })
+        caches.open(CACHE_NAME).then((cache) => {
+          // Ajout individuel des éléments au cache
+          return Promise.all(urlsToCache.map(url => cache.add(url)));
+      })
     );
 });
 
