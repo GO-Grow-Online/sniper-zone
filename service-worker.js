@@ -41,7 +41,6 @@ const urlsToCache = [
     // Scripts & styles
     '/assets/jquery.js',
     '/assets/app.js',
-    '/assets/media/video/',
     'style.css',
 ];
 
