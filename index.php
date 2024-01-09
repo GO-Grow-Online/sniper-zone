@@ -53,7 +53,7 @@
                 <li>
                     <button class="btn--lang" data-lang="fr">
                         <img src="assets/medias/image/fr_flag.svg" alt="Français">
-                        <span>Français test</span>
+                        <span>Français</span>
                     </button>
                 </li>
                 <li>
