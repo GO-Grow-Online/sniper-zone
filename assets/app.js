@@ -61,7 +61,7 @@ jQuery(function($) {
                     } else {
 
                         console.log('Mise en cache de la vidéo.');
-                        
+
                         updateProgress();
 
                         cache.add(url).then(function() {
@@ -285,12 +285,22 @@ jQuery(function($) {
     
     function step_select_lang() {
         $('#selectLang .btn--lang').on('click', function() {
+            let delay = 4000;
             let lang = $(this).attr('data-lang');
             $('body').attr('data-lang', lang);
             $('html').attr('lang', lang);
 
-            selected_lang = lang;
+            var videoPath = '../assets/medias/video/briefing-' + lang + '.mp4';
 
+            $('#video')[0].src = videoURL;
+
+            
+            popup("brief-begin", delay);
+            setTimeout(() => {
+                step_briefing();
+            }, delay);
+            
+            /*
             // Construction de l'URL de la vidéo en fonction de la langue sélectionnée
             var videoPath = '../assets/medias/video/briefing-' + selected_lang + '.mp4';
 
@@ -312,9 +322,9 @@ jQuery(function($) {
             } else {
                 console.error('La vidéo pour la langue sélectionnée n\'a pas été préalablement chargée.');
             }
+            */
 
 
-            let delay = 4000;
             
         });
     }
