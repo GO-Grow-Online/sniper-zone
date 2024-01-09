@@ -1,17 +1,19 @@
 // service-worker.js
 self.addEventListener('install', function(event) {
     event.waitUntil(
-      
+
       caches.open('my-cache').then(function(cache) {
         return cache.addAll([
-          '/',
+
           '/style.css',
           '/assets/app.js',
-          '/medias/images/bg.jpg',
-          '/videos/briefing-de.mp4',
-          '/videos/briefing-fr.mp4',
-          '/videos/briefing-nl.mp4',
-          '/videos/briefing-en.mp4'
+
+          '/assets/medias/images/bg.jpg',
+
+          '/assets/medias/videos/briefing-de.mp4',
+          '/assets/medias/videos/briefing-fr.mp4',
+          '/assets/medias/videos/briefing-nl.mp4',
+          '/assets/medias/videos/briefing-en.mp4'
         ]);
       })
     );
