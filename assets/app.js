@@ -44,12 +44,6 @@ jQuery(function($) {
 
         // Vérifier si la vidéo est en cache
         $.each(videoUrls, function (index, videoUrl) {
-            
-            loop--;
-            console.log(loop);
-            if(loop == 0) {
-                $('body').removeClass('loading');
-            }
 
             caches.open(cacheName).then(function (cache) {
                 cache.match(videoUrl).then(function (response) {

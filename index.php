@@ -32,7 +32,7 @@
     }
   </script>
 </head>
-<body data-lang="fr" class="loading">
+<body data-lang="fr" class="">
 
     <div class="loadingScreen">
         <div class="loadingScreen-indicator">
