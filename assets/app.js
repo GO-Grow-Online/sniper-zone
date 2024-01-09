@@ -37,11 +37,10 @@ jQuery(function($) {
             '/assets/medias/video/briefing-nl.mp4', 
         ];
 
+        var loop = videoUrls.length;
+
         // Nom du cache que vous avez défini dans votre service worker
         var cacheName = 'my-cache';
-
-        // Nom de la vidéo que vous souhaitez vérifier
-        var videoUrl = '/videos/video1.mp4';
 
         // Vérifier si la vidéo est en cache
         $.each(videoUrls, function (index, videoUrl) {
@@ -60,6 +59,11 @@ jQuery(function($) {
                     }
                 });
             });
+            
+            loop--;
+            if(loop == 0) {
+                $('body').removeClass('loading');
+            }
         });
         
         /*
@@ -93,7 +97,6 @@ jQuery(function($) {
                 });
             });
 
-            */
         }
     
         // Charger chaque vidéo une première fois
@@ -120,6 +123,7 @@ jQuery(function($) {
             console.error('Erreur lors de la mise en cache des vidéos:', error);
             // Gérer les erreurs si nécessaire
         });
+            */
         
     }
 
