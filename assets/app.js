@@ -25,8 +25,20 @@ jQuery(function($) {
 
     var previousStepId = null;
 
+
     
     function init_pwa(params) {
+
+
+        var progressBar = $('.loadingScreen-indicator-value');
+        var progressStep = 100 / videoUrls.length;
+        var currentProgress = 0;
+
+        function updateProgress() {
+            currentProgress += progressStep;
+            progressBar.text(currentProgress + '%');
+        }
+
         var cacheName = 'my-cache';
         
         // Fichiers à vérifier
@@ -47,6 +59,7 @@ jQuery(function($) {
                     } else {
                         cache.add(url).then(function() {
                             console.log('Vidéo ajoutée au cache:', url);
+                            updateProgress();
                         }).catch(function(error) {
                             console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
                         });
