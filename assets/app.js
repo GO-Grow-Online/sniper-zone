@@ -198,9 +198,6 @@ jQuery(function($) {
 
         // Change to briefing explaination and ask email after
         let video = $('#video-' + selected_lang);
-
-        console.log(video);
-        console.log('#video-' + selected_lang);
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
