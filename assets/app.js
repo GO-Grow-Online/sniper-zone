@@ -20,6 +20,32 @@ jQuery(function($) {
 
     var previousStepId = null;
 
+    
+    function ini_pwa(params) {
+        var cacheName = 'my-cache';
+        
+        // Files to verifiy
+        var videoUrls = [
+            '../assets/medias/video/briefing-de.mp4', 
+            '../assets/medias/video/briefing-en.mp4', 
+            '../assets/medias/video/briefing-fr.mp4', 
+            '../assets/medias/video/briefing-nl.mp4', 
+        ];
+    
+        // Check if files are in cache
+        caches.open(cacheName).then(function(cache) {
+            videoUrls.each(function() {                
+                cache.match($(this)).then(function(response) {
+                if (response) {
+                    console.log('La vidéo est en cache!');
+                } else {
+                    console.log('La vidéo n\'est pas en cache.');
+                }
+                });
+            })
+        });
+    }
+
     function loadApp_2() {
         var video = $('#video');
         video[0].play();
