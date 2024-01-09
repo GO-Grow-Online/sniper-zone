@@ -27,26 +27,27 @@ jQuery(function($) {
     function init_pwa(params) {
         var cacheName = 'my-cache';
         
-        // Files to verifiy
+        // Fichiers à vérifier
         var videoUrls = [
             '../assets/medias/video/briefing-de.mp4', 
             '../assets/medias/video/briefing-en.mp4', 
             '../assets/medias/video/briefing-fr.mp4', 
             '../assets/medias/video/briefing-nl.mp4', 
         ];
-    
-        // Check if files are in cache
+
+        // Vérifier si les fichiers sont en cache
         caches.open(cacheName).then(function(cache) {
-            videoUrls.each(function() {                
-                cache.match($(this)).then(function(response) {
-                if (response) {
-                    console.log('La vidéo est en cache!');
-                } else {
-                    console.log('La vidéo n\'est pas en cache.');
-                }
+            $.each(videoUrls, function(index, url) {                
+                cache.match(url).then(function(response) {
+                    if (response) {
+                        console.log('La vidéo est en cache!');
+                    } else {
+                        console.log('La vidéo n\'est pas en cache.');
+                    }
                 });
-            })
+            });
         });
+
     }
 
     function loadApp_2() {
