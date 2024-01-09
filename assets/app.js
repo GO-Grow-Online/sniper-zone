@@ -52,12 +52,12 @@ jQuery(function($) {
                         });
                         // loadApp();
                     }
-                });
-            }).then(function() {
-                $('body').removeClass('loading');
-            }).catch(function(error) {
-                console.error('Erreur lors de la mise en cache des vidéos:', error);
-            });;
+                }).then(function() {
+                    $('body').removeClass('loading');
+                }).catch(function(error) {
+                    console.error('Erreur lors de la mise en cache des vidéos:', error);
+                });;
+            });
         });
 
         // Vérifier si les fichiers sont en cache
