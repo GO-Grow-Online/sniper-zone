@@ -52,31 +52,30 @@ jQuery(function($) {
 
         // Vérifier si les fichiers sont en cache
         caches.open(cacheName).then(function(cache) {
-            $.each(videoUrls, function(index, url) {     
+            $.each(videoUrls, function(index, url) {   
+
+                console.log(toLoad);
                       
                 cache.match(url).then(function(response) {
                     if (response) {
                         console.log('La vidéo est en cache!');
                     } else {
 
-                        console.log('Mise en cache de la vidéo.');
-
-                        updateProgress();
+                        console.log('Mise en cache de la vidéo : ' + toLoad);
 
                         cache.add(url).then(function() {
                             console.log('Vidéo ajoutée au cache:', url);
                             updateProgress();
                             toLoad--;
 
-                            console.log(toLoad);
+                            // console.log(toLoad);
 
                             if (toLoad == 0) {
                                 $('body').removeClass('loading');
                             }
                         }).catch(function(error) {
-                            console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
+                            console.error('Erreur lors de l\'ajout de la vidéo '+ toLoad +' au cache:', error);
                         });
-                        // loadApp();
                     }
                 }).catch(function(error) {
                     console.error('Erreur lors de la mise en cache des vidéos:', error);
