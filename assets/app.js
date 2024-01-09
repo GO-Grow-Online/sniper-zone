@@ -43,7 +43,11 @@ jQuery(function($) {
                     if (response) {
                         console.log('La vidéo est en cache!');
                     } else {
-                        console.log('La vidéo n\'est pas en cache.');
+                        cache.add(url).then(function() {
+                            console.log('Vidéo ajoutée au cache:', url);
+                        }).catch(function(error) {
+                            console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
+                        });
                         // loadApp();
                     }
                 });
