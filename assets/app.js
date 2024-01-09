@@ -9,9 +9,9 @@ jQuery(function($) {
     virtual_keyboard();
     stepPrevious();
 
-    init_pwa()
+    // init_pwa()
 
-    // loadApp();
+    loadApp();
 
     // send_form();
     // popup();
@@ -127,7 +127,7 @@ jQuery(function($) {
                 // Vérifier si toutes les vidéos ont été chargées
                 if (videosToLoad === 0) {
                     // Fermer l'écran de chargement
-                    // ...
+                    $('body').removeClass('loading');
                 }
             } else {
                 var xhr = new XMLHttpRequest();
