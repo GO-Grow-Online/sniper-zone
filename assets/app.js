@@ -48,27 +48,43 @@ jQuery(function($) {
         }
     
         function cacheVideo(url) {
-            return fetch(url)
-                .then(function(response) {
-                    if (!response.ok) {
-                        throw new Error('Échec du chargement de la vidéo: ' + url);
+            caches.open(cacheName).then(function(cache) {
+                cache.match(url).then(function(response) {
+                    if (!response) {
+                        // Si la vidéo n'est pas en cache, l'ajouter
+                        cache.add(url).then(function() {
+                            console.log('Vidéo ajoutée au cache:', url);
+                            updateProgress();
+                        }).catch(function(error) {
+                            console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
+                        });
+                    } else {
+                        console.log('La vidéo est déjà en cache:', url);
+                        updateProgress();
                     }
-                    return response.blob();
-                })
-                .then(function(blob) {
-                    return caches.open(cacheName).then(function(cache) {
-                        return cache.put(url, new Response(blob));
-                    });
-                })
-                .then(function() {
-                    console.log('Vidéo ajoutée au cache:', url);
-                    updateProgress();
-                })
-                .catch(function(error) {
-                    console.error('Erreur lors de l\'ajout de la vidéo au cache:', error);
+                }).catch(function(error) {
+                    console.error('Erreur lors de la mise en cache de la vidéo:', error);
                 });
+            });
         }
+    
+        // Charger chaque vidéo une première fois
+        videoUrls.forEach(function(url) {
+            var video = document.createElement('video');
+            video.src = url;
+            
+            video.addEventListener('loadeddata', function() {
+                
+                if(video.readyState >= 3){
+                    console.log('Vidéo chargée:', url);
+                    cacheVideo(url);
         
+                    // video.remove();
+                }
+             
+            });
+        });
+    
         // Masquer l'écran de chargement une fois la mise en cache terminée
         Promise.all(videoUrls.map(cacheVideo)).then(function() {
             $('#loader-container').hide();
