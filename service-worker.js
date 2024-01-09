@@ -16,6 +16,7 @@ const urlsToCache = [
     '/assets/favicon/safari-pinned-tab.svg',
     '/assets/favicon/site.webmanifest',
 
+    /*
     // Fonts
     '/assets/fonts/urbanist-black-italic.ttf',
     '/assets/fonts/urbanist-black.ttf',
@@ -42,6 +43,7 @@ const urlsToCache = [
     '/assets/jquery.js',
     '/assets/app.js',
     '/style.css',
+    */
 ];
 
 self.addEventListener('install', (event) => {
