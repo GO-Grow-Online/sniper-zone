@@ -37,7 +37,8 @@ jQuery(function($) {
 
         // Vérifier si les fichiers sont en cache
         caches.open(cacheName).then(function(cache) {
-            $.each(videoUrls, function(index, url) {                
+            $.each(videoUrls, function(index, url) {       
+                console.log(url);         
                 cache.match(url).then(function(response) {
                     if (response) {
                         console.log('La vidéo est en cache!');
