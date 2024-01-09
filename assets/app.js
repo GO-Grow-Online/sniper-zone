@@ -127,6 +127,7 @@ jQuery(function($) {
                 // Vérifier si toutes les vidéos ont été chargées
                 if (videosToLoad === 0) {
                     // Fermer l'écran de chargement
+                    console.log("Vidéos déjà chargées.");
                     $('body').removeClass('loading');
                 }
             } else {
@@ -143,9 +144,11 @@ jQuery(function($) {
     
                         // Vérifier si toutes les vidéos ont été chargées
                         videosToLoad--;
+                        console.log("Ajouté au storage" + video.path);
                         if (videosToLoad === 0) {
                             // Fermer l'écran de chargement
-                            // ...
+                            console.log("Vidéos ajoutées au localStorage.");
+                            $('body').removeClass('loading');
                         }
                     };
                     reader.readAsDataURL(xhr.response);
