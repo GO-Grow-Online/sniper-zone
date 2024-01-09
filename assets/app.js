@@ -78,7 +78,7 @@ jQuery(function($) {
                 if(video.readyState >= 3){
                     console.log('Vidéo chargée:', url);
                     cacheVideo(url);
-        
+                    $('body').removeClass('loading');
                     // video.remove();
                 }
              
