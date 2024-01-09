@@ -135,18 +135,16 @@ jQuery(function($) {
             // No video in localStorage
             } else {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', video.path, true);
-                xhr.responseType = 'blob';
-                
-                console.log('Pas de vidéos dans le localStorage.');
+
+                // Placez xhr.onload avant d'ouvrir la requête
                 xhr.onload = function() {
                     var reader = new FileReader();
-
+    
                     console.log('Pxhr.onload');
                     reader.onloadend = function() {
-
+    
                         console.log('reader.onloadend');
-
+    
                         var base64Data = reader.result.split(',')[1];
                         localStorage.setItem(video.path, base64Data);
                         maVideo.src = "data:video/mp4;base64," + base64Data;
@@ -162,6 +160,11 @@ jQuery(function($) {
                     };
                     reader.readAsDataURL(xhr.response);
                 };
+    
+                xhr.open('GET', video.path, true);
+                xhr.responseType = 'blob';
+                
+                console.log('Pas de vidéos dans le localStorage.');
                 xhr.send();
             }
         });
