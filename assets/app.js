@@ -117,30 +117,36 @@ jQuery(function($) {
     
         videos.forEach(function(video) {
             var videoData = localStorage.getItem(video.path);
-    
+            
+            // Video found in localStorage
             if (videoData) {
                 var blob = base64toBlob(videoData);
                 var videoURL = URL.createObjectURL(blob);
                 maVideo.src = videoURL;
                 videosToLoad--;
-
-                console.log(videosToLoad);
     
                 // Vérifier si toutes les vidéos ont été chargées
                 if (videosToLoad === 0) {
                     // Fermer l'écran de chargement
-                    console.log("Vidéos déjà chargées.");
                     $('.loadingScreen-indicator-value').text("Vidéos déjà chargées.");
                     $('body').removeClass('loading');
                 }
+
+            // No video in localStorage
             } else {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', video.path, true);
                 xhr.responseType = 'blob';
-    
+                
+                console.log('Pas de vidéos dans le localStorage.');
                 xhr.onload = function() {
                     var reader = new FileReader();
+
+                    console.log('Pxhr.onload');
                     reader.onloadend = function() {
+
+                        console.log('reader.onloadend');
+
                         var base64Data = reader.result.split(',')[1];
                         localStorage.setItem(video.path, base64Data);
                         maVideo.src = "data:video/mp4;base64," + base64Data;
@@ -150,7 +156,6 @@ jQuery(function($) {
                         console.log("Ajouté au storage" + video.path);
                         if (videosToLoad === 0) {
                             // Fermer l'écran de chargement
-                            console.log("Vidéos ajoutées au localStorage.");
                             $('.loadingScreen-indicator-value').text(video.path + "ajoutée");
                             $('body').removeClass('loading');
                         }
