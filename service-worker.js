@@ -46,16 +46,16 @@ const urlsToCache = [
 
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(CACHE_NAME).then((cache) => {
-     return cache.addAll(urlsToCache)
+     return cache.addAll(urlsToCache);
     }) );
 });
 
 self.addEventListener('fetch', (e) => {
-        e.respondWith(caches.match(e.request).then((response) => {
-        if(response) {
-            return response
-        }else {
-            return fetch(e.request)
-        }
-    }) )
+    e.respondWith(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.match(e.request).then((response) => {
+                return response || fetch(e.request);
+            });
+        })
+    );
 });
