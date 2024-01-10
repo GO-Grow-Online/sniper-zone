@@ -90,22 +90,21 @@ self.addEventListener('fetch', (event) => {
   */
 
 
-  const VIDEOS_TO_CACHE = [
+const VIDEOS_TO_CACHE = [
     '/assets/medias/video/briefing-de.mp4',
     '/assets/medias/video/briefing-en.mp4',
     '/assets/medias/video/briefing-fr.mp4',
     '/assets/medias/video/briefing-nl.mp4',
-  ];
+];
+
   
-  self.addEventListener('install', (event) => {
+self.addEventListener('activate', (event) => {
     event.waitUntil(
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.addAll(VIDEOS_TO_CACHE);
-      })
+        caches.open(CACHE_NAME).then((cache) => {
+          return cache.addAll(VIDEOS_TO_CACHE);
+        })
     );
-  });
-  
-  self.addEventListener('activate', (event) => {
+
     event.waitUntil(
       caches.keys().then((cacheNames) => {
         return Promise.all(
@@ -117,9 +116,9 @@ self.addEventListener('fetch', (event) => {
         );
       })
     );
-  });
-  
-  self.addEventListener('fetch', (event) => {
+});
+
+self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(event.request).then((response) => {
         if (response) {
@@ -147,5 +146,5 @@ self.addEventListener('fetch', (event) => {
           });
       })
     );
-  });
+});
   
