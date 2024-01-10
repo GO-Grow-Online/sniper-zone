@@ -11,9 +11,9 @@ use PHPMailer\PHPMailer\Exception;
 
 $response = "";
 
-$servername = "sniperzobriefing.mysql.db";
-$username = "sniperzobriefing";
-$password = "Re8hR8jR3Y1aH3JWNMVYKXnqjcYKHD";
+$servername = "localhost";
+$username = "Sniper Zone";
+$password = "sniper-zone";
 
 $databaseName = "sniperzobriefing";
 $tableName = "customers";
