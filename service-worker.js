@@ -44,53 +44,18 @@ const urlsToCache = [
 ];
 
 
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-
-        // Delete old cache
-        caches.keys().then((cacheNames) => {
-
-            return cache.addAll(urlsToCache);
-
-            // return Promise.all(
-            //     cacheNames.filter((name) => {
-            //         return name !== CACHE_NAME;
-            //     }).map((name) => {
-            //         return caches.delete(name);
-            //     })
-            // );
-        })
-    );
+self.addEventListener('install', (e) => {
+    e.waitUntil(caches.open(CACHE_NAME).then((cache) => {
+     return cache.addAll(urlsToCache)
+    }) );
 });
 
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // If in cache, use it
-                if (response) {
-                    return response;
-                }
-
-                // If not in cache, download it and add to cache
-                return fetch(event.request)
-                    .then((networkResponse) => {
-                        // Check if ressource download is successful and if it is GET
-                        if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
-                            // Exclude chrome extention
-                            if (event.request.url.indexOf('chrome-extension') === -1) {
-                                caches.open(CACHE_NAME)
-                                    .then((cache) => {
-                                        cache.put(event.request, networkResponse.clone());
-                                    });
-                            }
-                        }
-                        return networkResponse;
-                    })
-                    .catch(() => {
-                        // Add fallback if necessary
-                        console.log('Network unavailable');
-                    });
-            })
-    );
+self.addEventListener('fetch', (e) => {
+        e.respondWith(caches.match(e.request).then((response) => {
+        if(response) {
+            return response
+        }else {
+            return fetch(e.request)
+        }
+    }) )
 });
