@@ -84,7 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail_admin->isHTML(true);
 
             $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-            $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
+            // $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone');
+            $mail_admin->addAddress('julien.growonline@gmail.com', 'Sniper zone');
 
             $mail_admin->Subject = "Borne briefing - Sniper Zone";
             $mail_admin->Body = "Un nouveau client à utilisé la borne ! <br/> Voici son email : '" . $customerEmail . "' <br/> La preuve de vision du briefing sera disponible sur la borne durant 2 mois !";
@@ -114,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Create an entry in database to keep a sorted record of each video associated with date and associated email
         // Connect to database
-        $conn = new mysqli('localhost', 'Sniper Zone', 'sniper-zone');
+        $conn = new mysqli('sniperzobriefing.mysql.db', 'sniperzobriefing', 'Re8hR8jR3Y1aH3JWNMVYKXnqjcYKHD');
 
         if ($conn->connect_error) {
             $response .= 'La connexion à la base de données a échoué : ' . $conn->connect_error;

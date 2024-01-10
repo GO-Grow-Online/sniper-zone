@@ -4,10 +4,10 @@ const CACHE_NAME = 'sniperzone-cache-v1';
 const urlsToCache = [
 
     // Videos
-    '/assets/medias/video/briefing-de.mp4',
-    '/assets/medias/video/briefing-en.mp4',
-    '/assets/medias/video/briefing-fr.mp4',
-    '/assets/medias/video/briefing-nl.mp4',
+    // '/assets/medias/video/briefing-de.mp4',
+    // '/assets/medias/video/briefing-en.mp4',
+    // '/assets/medias/video/briefing-fr.mp4',
+    // '/assets/medias/video/briefing-nl.mp4',
 
     // Favicon
     '/',
@@ -44,10 +44,9 @@ const urlsToCache = [
     '/style.css',
 ];
 
-
+/*
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-      // Supprime les caches précédents
       caches.keys().then((cacheNames) => {
           return Promise.all(
               cacheNames.filter((name) => {
@@ -61,30 +60,96 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-      caches.match(event.request)
-          .then((response) => {
-              // Si la ressource est présente dans le cache, on la retourne
-              if (response) {
-                  return response;
-              }
-
-              // Sinon, on fait une requête réseau et on ajoute la réponse au cache
-              return fetch(event.request)
-                  .then((networkResponse) => {
-                      // On vérifie si la requête réseau a réussi
-                      if (!networkResponse || networkResponse.status !== 200) {
-                          return networkResponse;
-                      }
-
-                      // On ajoute la réponse au cache et on la retourne
-                      return caches.open(CACHE_NAME)
-                          .then((cache) => {
-                              cache.put(event.request, networkResponse.clone());
-                              return networkResponse;
-                          });
-                  });
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+  
+        if (!navigator.onLine) {
+          return new Response('You are offline. Please check your internet connection.');
+        }
+  
+        return fetch(event.request)
+          .then((networkResponse) => {
+            if (!networkResponse || networkResponse.status !== 200 || event.request.method !== 'GET') {
+              return networkResponse;
+            }
+  
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
           })
-  );
+          .catch((error) => {
+            console.error('Fetch error:', error);
+          });
+      })
+    );
+  });
+  */
+
+
+const VIDEOS_CACHE_NAME = 'sniperzone-video-cache-v1';
+const VIDEOS_TO_CACHE = [
+    '/assets/medias/video/briefing-de.mp4',
+    '/assets/medias/video/briefing-en.mp4',
+    '/assets/medias/video/briefing-fr.mp4',
+    '/assets/medias/video/briefing-nl.mp4',
+];
+
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+            return cache.addAll(VIDEOS_TO_CACHE).catch((error) => {
+              console.error('Cache.addAll error:', error);
+            });
+        })
+    );
 });
 
+  
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+            return Promise.all(
+                VIDEOS_TO_CACHE.map((videoUrl) => {
+                    return fetch(videoUrl).then((response) => {
+                        return cache.put(videoUrl, response);
+                    });
+                })
+            );
+        })
+    );
+});
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+  
+        if (!navigator.onLine) {
+          // Gérer la réponse hors ligne ici si nécessaire
+          return new Response('You are offline. Please check your internet connection.');
+        }
+  
+        return fetch(event.request)
+          .then((networkResponse) => {
+            if (!networkResponse || networkResponse.status !== 200 || event.request.method !== 'GET') {
+              return networkResponse;
+            }
+  
+            return caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
+          })
+          .catch((error) => {
+            console.error('Fetch error:', error);
+          });
+      })
+    );
+});
+  

@@ -11,11 +11,11 @@ use PHPMailer\PHPMailer\Exception;
 
 $response = "";
 
-$servername = "localhost";
-$username = "Sniper Zone";
-$password = "sniper-zone";
+$servername = "sniperzobriefing.mysql.db";
+$username = "sniperzobriefing";
+$password = "Re8hR8jR3Y1aH3JWNMVYKXnqjcYKHD";
 
-$databaseName = "sniper_zone";
+$databaseName = "sniperzobriefing";
 $tableName = "customers";
 
 // Connection to DB
@@ -118,7 +118,8 @@ if ($result->num_rows > 0) {
                 $mail_admin->isHTML(true);
 
                 $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-                $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
+                // $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone');
+                $mail_admin->addAddress('julien.growonline@gmail.com', 'Sniper zone');
 
                 $mail_admin->Subject = "Borne briefing - Sniper Zone";
                 $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";

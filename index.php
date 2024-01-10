@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sniperzone testing</title>
+    <title>Sniperzone briefing</title>
     <script src="assets/jquery.js"></script>
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -220,6 +220,16 @@
                 <p data-trad="de">Eine E-Mail wurde an die angegebene Adresse gesendet. Vielen Dank für Ihre Aufmerksamkeit.</p>
                 <p data-trad="en">An email has been sent to the provided address. Thank you for your attention.</p>
                 <p data-trad="nl">Een e-mail is verzonden naar het opgegeven adres. Bedankt voor uw aandacht.</p>
+            </div>
+        </div>
+
+        <div class="popup popup-center" data-popup="succes-no-picture">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p data-trad="fr">Merci pour votre attention.</p>
+                <p data-trad="de">Vielen Dank für Ihre Aufmerksamkeit.</p>
+                <p data-trad="en">Thank you for your attention.</p>
+                <p data-trad="nl">Bedankt voor uw aandacht.</p>
             </div>
         </div>
 

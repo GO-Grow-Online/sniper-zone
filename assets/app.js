@@ -197,7 +197,7 @@ jQuery(function($) {
 
 
         // Change to briefing explaination and ask email after
-        let video = $('#video-' + selected_lang);
+        let video = $('#briefing #video-' + selected_lang);
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
@@ -252,7 +252,7 @@ jQuery(function($) {
 
                     mediaRecorder.start();
 
-                    $('#briefing #video').on('ended', function() {
+                    $('#briefing #video-' + selected_lang).on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
@@ -283,7 +283,12 @@ jQuery(function($) {
         });
 
         $('section#askPicture .btn--cancel').on('click', function(){
-            stepChange('email');
+            // stepChange('email');
+            
+            popup('succes-no-picture', 10000);
+            setTimeout(() => {
+                location.reload();
+            }, 10000);
 
             // Unset picture in case user stepped back from email and takePicture
             group_picture_to_send = null;
@@ -296,15 +301,15 @@ jQuery(function($) {
         var capturedImage = $('#takePicture .takePicture-result-capturedImage');
         var canvas = $('#takePicture .takePicture-result-canva')[0];
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                video_preview.prop('srcObject', stream);
-                // $('#takePicture .videoPreview')[0].play();
-                
-            })
-            .catch(function(error) {
-                console.error('Error accessing webcam:', error);
-            });
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        //     .then(function(stream) {
+        //         video_preview.prop('srcObject', stream);
+        //         // $('#takePicture .videoPreview')[0].play();
+        //         
+        //     })
+        //     .catch(function(error) {
+        //         console.error('Error accessing webcam:', error);
+        //     });
 
         $('.btn--takePicture').on('click', function() {
 
