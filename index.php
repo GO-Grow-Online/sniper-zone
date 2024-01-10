@@ -17,6 +17,8 @@
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    
+    <meta name="robots" content="noindex, nofollow">
 
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">

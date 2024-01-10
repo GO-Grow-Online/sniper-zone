@@ -17,6 +17,8 @@
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+
+    <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="clients">
     <a href="index.php" class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
