@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'sniperzone-cache-v2';
+const CACHE_NAME = 'sniperzone-cache-v1';
 const urlsToCache = [
 
     // Videos
@@ -10,6 +10,7 @@ const urlsToCache = [
     '/assets/medias/video/briefing-nl.mp4',
 
     // Favicon
+    '/',
     '/assets/favicon/android-chrome-192x192.png',
     '/assets/favicon/android-chrome-512x512.png',
     '/assets/favicon/apple-touch-icon.png',
@@ -45,52 +46,45 @@ const urlsToCache = [
 
 
 self.addEventListener('activate', (event) => {
-    event.waitUntil(
-
-        // Delete old cache
-        caches.keys().then((cacheNames) => {
-
-            // return cache.addAll(urlsToCache);
-
-            return Promise.all(
-                cacheNames.filter((name) => {
-                    return name !== CACHE_NAME;
-                }).map((name) => {
-                    return caches.delete(name);
-                })
-            );
-        })
-    );
+  event.waitUntil(
+      // Supprime les caches précédents
+      caches.keys().then((cacheNames) => {
+          return Promise.all(
+              cacheNames.filter((name) => {
+                  return name !== CACHE_NAME;
+              }).map((name) => {
+                  return caches.delete(name);
+              })
+          );
+      })
+  );
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // If in cache, use it
-                if (response) {
-                    return response;
-                }
+  event.respondWith(
+      caches.match(event.request)
+          .then((response) => {
+              // Si la ressource est présente dans le cache, on la retourne
+              if (response) {
+                  return response;
+              }
 
-                // If not in cache, download it and add to cache
-                return fetch(event.request)
-                    .then((networkResponse) => {
-                        // Check if ressource download is successful and if it is GET
-                        if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
-                            // Exclude chrome extention
-                            if (event.request.url.indexOf('chrome-extension') === -1) {
-                                caches.open(CACHE_NAME)
-                                    .then((cache) => {
-                                        cache.put(event.request, networkResponse.clone());
-                                    });
-                            }
-                        }
-                        return networkResponse;
-                    })
-                    .catch(() => {
-                        // Add fallback if necessary
-                        console.log('Network unavailable');
-                    });
-            })
-    );
+              // Sinon, on fait une requête réseau et on ajoute la réponse au cache
+              return fetch(event.request)
+                  .then((networkResponse) => {
+                      // On vérifie si la requête réseau a réussi
+                      if (!networkResponse || networkResponse.status !== 200) {
+                          return networkResponse;
+                      }
+
+                      // On ajoute la réponse au cache et on la retourne
+                      return caches.open(CACHE_NAME)
+                          .then((cache) => {
+                              cache.put(event.request, networkResponse.clone());
+                              return networkResponse;
+                          });
+                  });
+          })
+  );
 });
+
