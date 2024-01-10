@@ -49,13 +49,14 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
       // Supprime les caches précédents
       caches.keys().then((cacheNames) => {
-          return Promise.all(
-              cacheNames.filter((name) => {
-                  return name !== CACHE_NAME;
-              }).map((name) => {
-                  return caches.delete(name);
-              })
-          );
+        return cache.addAll(urlsToCache);
+          // return Promise.all(
+          //     cacheNames.filter((name) => {
+          //         return name !== CACHE_NAME;
+          //     }).map((name) => {
+          //         return caches.delete(name);
+          //     })
+          // );
       })
   );
 });
