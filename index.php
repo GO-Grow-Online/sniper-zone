@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sniperzone briefing</title>
+    <title>Sniper Zone briefing</title>
     <script src="assets/jquery.js"></script>
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -17,20 +17,6 @@
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(function(registration) {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(function(error) {
-          console.error('Service Worker registration failed:', error);
-        });
-    }
-  </script>
 </head>
 <body data-lang="fr" class="">
 

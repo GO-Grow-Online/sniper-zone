@@ -21,19 +21,6 @@ jQuery(function($) {
 
     var previousStepId = null;
 
-    function init_app() {
-        window.addEventListener('offline', () => {
-            console.log('You are offline. Loading from cache...');
-        });
-        
-        window.addEventListener('online', () => {
-            console.log('You are online.');
-        });
-    }
-    
-
-
-
     
     function stepChange(nextStep) {
         var previousStep = $('section.current');

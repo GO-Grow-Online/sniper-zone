@@ -118,8 +118,8 @@ if ($result->num_rows > 0) {
                 $mail_admin->isHTML(true);
 
                 $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-                // $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone');
-                $mail_admin->addAddress('julien.growonline@gmail.com', 'Sniper zone');
+                $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone');
+                // $mail_admin->addAddress('julien.growonline@gmail.com', 'Sniper zone');
 
                 $mail_admin->Subject = "Borne briefing - Sniper Zone";
                 $mail_admin->Body = "Voici en pièce jointe la preuve vidéo du groupe ayant utilisé l'adresse : '" . $customerEmail . "'";
