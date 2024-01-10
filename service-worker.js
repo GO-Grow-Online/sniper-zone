@@ -4,10 +4,10 @@ const CACHE_NAME = 'sniperzone-cache-v1';
 const urlsToCache = [
 
     // Videos
-    '/assets/medias/video/briefing-de.mp4',
-    '/assets/medias/video/briefing-en.mp4',
-    '/assets/medias/video/briefing-fr.mp4',
-    '/assets/medias/video/briefing-nl.mp4',
+    // '/assets/medias/video/briefing-de.mp4',
+    // '/assets/medias/video/briefing-en.mp4',
+    // '/assets/medias/video/briefing-fr.mp4',
+    // '/assets/medias/video/briefing-nl.mp4',
 
     // Favicon
     '/',
@@ -44,7 +44,7 @@ const urlsToCache = [
     '/style.css',
 ];
 
-
+/*
 self.addEventListener('activate', (event) => {
   event.waitUntil(
       caches.keys().then((cacheNames) => {
@@ -67,6 +67,67 @@ self.addEventListener('fetch', (event) => {
         }
   
         if (!navigator.onLine) {
+          return new Response('You are offline. Please check your internet connection.');
+        }
+  
+        return fetch(event.request)
+          .then((networkResponse) => {
+            if (!networkResponse || networkResponse.status !== 200 || event.request.method !== 'GET') {
+              return networkResponse;
+            }
+  
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
+          })
+          .catch((error) => {
+            console.error('Fetch error:', error);
+          });
+      })
+    );
+  });
+  */
+
+
+  const VIDEOS_TO_CACHE = [
+    '/assets/medias/video/briefing-de.mp4',
+    '/assets/medias/video/briefing-en.mp4',
+    '/assets/medias/video/briefing-fr.mp4',
+    '/assets/medias/video/briefing-nl.mp4',
+  ];
+  
+  self.addEventListener('install', (event) => {
+    event.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.addAll(VIDEOS_TO_CACHE);
+      })
+    );
+  });
+  
+  self.addEventListener('activate', (event) => {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.filter((name) => {
+            return name !== CACHE_NAME;
+          }).map((name) => {
+            return caches.delete(name);
+          })
+        );
+      })
+    );
+  });
+  
+  self.addEventListener('fetch', (event) => {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+  
+        if (!navigator.onLine) {
+          // Gérer la réponse hors ligne ici si nécessaire
           return new Response('You are offline. Please check your internet connection.');
         }
   
