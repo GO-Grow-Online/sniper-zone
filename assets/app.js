@@ -197,7 +197,7 @@ jQuery(function($) {
 
 
         // Change to briefing explaination and ask email after
-        let video = $('#video-' + selected_lang);
+        let video = $('#briefing #video-' + selected_lang);
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
@@ -252,7 +252,7 @@ jQuery(function($) {
 
                     mediaRecorder.start();
 
-                    $('#briefing #video').on('ended', function() {
+                    $('#briefing #video-' + selected_lang).on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
