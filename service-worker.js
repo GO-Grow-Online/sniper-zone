@@ -47,7 +47,6 @@ const urlsToCache = [
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-      // Supprime les caches précédents
       caches.keys().then((cacheNames) => {
           return Promise.all(
               cacheNames.filter((name) => {
