@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'sniperzone-cache-v1';
+const CACHE_NAME = 'sniperzone-cache-v2';
 const urlsToCache = [
 
     // Videos
