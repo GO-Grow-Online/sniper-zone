@@ -111,15 +111,15 @@ self.addEventListener('install', (event) => {
   
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.filter((name) => {
-            return name !== VIDEOS_CACHE_NAME;
-          }).map((name) => {
-            return caches.delete(name);
-          })
-        );
-      })
+        caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+            return Promise.all(
+                VIDEOS_TO_CACHE.map((videoUrl) => {
+                    return fetch(videoUrl).then((response) => {
+                        return cache.put(videoUrl, response);
+                    });
+                })
+            );
+        })
     );
 });
 
