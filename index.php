@@ -223,6 +223,16 @@
             </div>
         </div>
 
+        <div class="popup popup-center" data-popup="succes-no-picture">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p data-trad="fr">Merci pour votre attention.</p>
+                <p data-trad="de">Vielen Dank für Ihre Aufmerksamkeit.</p>
+                <p data-trad="en">Thank you for your attention.</p>
+                <p data-trad="nl">Bedankt voor uw aandacht.</p>
+            </div>
+        </div>
+
         <div class="popup popup-infinite popup-center" data-popup="failed-mails-sending">
             <div class="popup-msg">
                 <svg class="loader" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.25V4.75M12 18V22M18.25 12H21.75M2.75 12H4.25M5.54289 18.4571L6.25 17.75M5.33579 5.41579L6.75 6.83M19.0784 19.0784L16.25 16.25M18.8713 5.20868L16.75 7.33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>

@@ -283,7 +283,12 @@ jQuery(function($) {
         });
 
         $('section#askPicture .btn--cancel').on('click', function(){
-            stepChange('email');
+            // stepChange('email');
+            
+            popup('succes-no-picture', 10000);
+            setTimeout(() => {
+                location.reload();
+            }, 10000);
 
             // Unset picture in case user stepped back from email and takePicture
             group_picture_to_send = null;
