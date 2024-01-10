@@ -90,6 +90,7 @@ self.addEventListener('fetch', (event) => {
   */
 
 
+const VIDEOS_CACHE_NAME = 'sniperzone-video-cache-v1';
 const VIDEOS_TO_CACHE = [
     '/assets/medias/video/briefing-de.mp4',
     '/assets/medias/video/briefing-en.mp4',
@@ -97,19 +98,21 @@ const VIDEOS_TO_CACHE = [
     '/assets/medias/video/briefing-nl.mp4',
 ];
 
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+      caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+        return cache.addAll(VIDEOS_TO_CACHE);
+      })
+    );
+});
+
   
 self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-          return cache.addAll(VIDEOS_TO_CACHE);
-        })
-    );
-
     event.waitUntil(
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.filter((name) => {
-            return name !== CACHE_NAME;
+            return name !== VIDEOS_CACHE_NAME;
           }).map((name) => {
             return caches.delete(name);
           })
@@ -136,7 +139,7 @@ self.addEventListener('fetch', (event) => {
               return networkResponse;
             }
   
-            return caches.open(CACHE_NAME).then((cache) => {
+            return caches.open(VIDEOS_CACHE_NAME).then((cache) => {
               cache.put(event.request, networkResponse.clone());
               return networkResponse;
             });
