@@ -46,15 +46,19 @@ const urlsToCache = [
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
+
         // Delete old cache
         caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.filter((name) => {
-                    return name !== CACHE_NAME;
-                }).map((name) => {
-                    return caches.delete(name);
-                })
-            );
+
+            return cache.addAll(urlsToCache);
+
+            // return Promise.all(
+            //     cacheNames.filter((name) => {
+            //         return name !== CACHE_NAME;
+            //     }).map((name) => {
+            //         return caches.delete(name);
+            //     })
+            // );
         })
     );
 });
@@ -73,7 +77,7 @@ self.addEventListener('fetch', (event) => {
                     .then((networkResponse) => {
                         // Check if ressource download is successful and if it is GET
                         if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
-                            // Exclude
+                            // Exclude chrome extention
                             if (event.request.url.indexOf('chrome-extension') === -1) {
                                 caches.open(CACHE_NAME)
                                     .then((cache) => {
@@ -84,7 +88,7 @@ self.addEventListener('fetch', (event) => {
                         return networkResponse;
                     })
                     .catch(() => {
-                        // En cas d'erreur de réseau, vous pouvez ajouter une logique de fallback ici si nécessaire
+                        // Add fallback if necessary
                         console.log('Network unavailable');
                     });
             })
