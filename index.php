@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sniperzone testing</title>
+    <title>Sniperzone briefing</title>
     <script src="assets/jquery.js"></script>
     <script src="assets/app.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -17,8 +17,32 @@
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  </script>
 </head>
-<body data-lang="fr">
+<body data-lang="fr" class="">
+
+    <div class="loadingScreen">
+        <div class="loadingScreen-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.25V4.75M12 18V22M18.25 12H21.75M2.75 12H4.25M5.54289 18.4571L6.25 17.75M5.33579 5.41579L6.75 6.83M19.0784 19.0784L16.25 16.25M18.8713 5.20868L16.75 7.33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            <span class="loadingScreen-indicator-value"></span>
+        </div>
+    </div>
 
     <main>
   
@@ -58,9 +82,23 @@
             <!-- button class="btn btn-round btn--previous"><svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H14.5C16.9853 5 19 7.01472 19 9.5C19 11.9853 16.9853 14 14.5 14H10M1 5L5 1M1 5L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></!-->
 
             <video autoplay class="videoPreview"></video>
-            <video preload="auto" id="video">
-                <source src="" type="video/mp4">
+
+            <video preload="auto" id="video-fr" data-trad="fr">
+                <source src="/assets/medias/video/briefing-fr.mp4" type="video/mp4">
             </video>
+
+            <video preload="auto" id="video-de" data-trad="de">
+                <source src="/assets/medias/video/briefing-de.mp4" type="video/mp4">
+            </video>
+
+            <video preload="auto" id="video-en" data-trad="en">
+                <source src="/assets/medias/video/briefing-en.mp4" type="video/mp4">
+            </video>
+
+            <video preload="auto" id="video-nl" data-trad="nl">
+                <source src="/assets/medias/video/briefing-nl.mp4" type="video/mp4">
+            </video>
+
         </section>
 
         <section id="email" class="">
@@ -182,6 +220,16 @@
                 <p data-trad="de">Eine E-Mail wurde an die angegebene Adresse gesendet. Vielen Dank für Ihre Aufmerksamkeit.</p>
                 <p data-trad="en">An email has been sent to the provided address. Thank you for your attention.</p>
                 <p data-trad="nl">Een e-mail is verzonden naar het opgegeven adres. Bedankt voor uw aandacht.</p>
+            </div>
+        </div>
+
+        <div class="popup popup-center" data-popup="succes-no-picture">
+            <div class="popup-msg">
+                <span class="popup-closeDelay"><span></span></span>
+                <p data-trad="fr">Merci pour votre attention.</p>
+                <p data-trad="de">Vielen Dank für Ihre Aufmerksamkeit.</p>
+                <p data-trad="en">Thank you for your attention.</p>
+                <p data-trad="nl">Bedankt voor uw aandacht.</p>
             </div>
         </div>
 

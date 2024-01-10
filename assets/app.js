@@ -8,10 +8,11 @@ jQuery(function($) {
     delete_client();
     virtual_keyboard();
     stepPrevious();
+
+    init_app();
+
     // send_form();
     // popup();
-    // loadApp();
-    // loadApp_2();
 
     var video_to_send = null;
     var group_picture_to_send = null;
@@ -20,48 +21,19 @@ jQuery(function($) {
 
     var previousStepId = null;
 
-    function loadApp_2() {
-        var video = $('#video');
-        video[0].play();
+    function init_app() {
+        window.addEventListener('offline', () => {
+            console.log('You are offline. Loading from cache...');
+        });
+        
+        window.addEventListener('online', () => {
+            console.log('You are online.');
+        });
     }
+    
 
-    function loadApp() {
-        var video = $('#video');
-        var sources = video.find('source');
-        var totalSources = sources.length;
-        var loadedSources = 0;
 
-        if (video.length) {
-            sources.each(function() {
-                let source = $(this);
-                var video_url = $(this).attr('data-src');
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', video_url, true);
-                xhr.responseType = 'blob';
-                
-                // Get and display current download progress
-                xhr.onprogress = function(event) {
-                    if (event.lengthComputable) {
-                        var progress = Math.floor((event.loaded / event.total) * 100);
-                        $('.loadingScreen-indicator-value').text(progress);
-                    }
-                };
-
-                // Hide loading screen
-                xhr.onload = function() {
-                    loadedSources++;
-
-                    if (loadedSources === totalSources) {
-                        $('body').removeClass('loading');
-                        // console.log('Toutes les vidéos ont été chargées.');
-                    }
-                };
-
-                xhr.send();
-            });
-        }
-    }
     
     function stepChange(nextStep) {
         var previousStep = $('section.current');
@@ -175,18 +147,47 @@ jQuery(function($) {
     
     function step_select_lang() {
         $('#selectLang .btn--lang').on('click', function() {
-            let lang = $(this).attr('data-lang');
-            $('body').attr('data-lang', lang);
-            $('html').attr('lang', lang);
-
-            selected_lang = lang;
-
-            // Load video in right language
             let delay = 4000;
+            selected_lang = $(this).attr('data-lang');
+            $('body').attr('data-lang', selected_lang);
+            $('html').attr('lang', selected_lang);
+
+            var videoPath = '../assets/medias/video/briefing-' + selected_lang + '.mp4';
+
+            $('#video-' + selected_lang)[0].src = videoPath;
+
+            
             popup("brief-begin", delay);
             setTimeout(() => {
                 step_briefing();
             }, delay);
+            
+            /*
+            // Construction de l'URL de la vidéo en fonction de la langue sélectionnée
+            var videoPath = '../assets/medias/video/briefing-' + selected_lang + '.mp4';
+
+            // Get video from local storage
+            var maVideo = $('#video')[0];
+            var videoData = localStorage.getItem(videoPath);
+
+            if (videoData) {
+
+                // Load video in right language
+                var blob = base64toBlob(videoData);
+                var videoURL = URL.createObjectURL(blob);
+                maVideo.src = videoURL;
+
+                popup("brief-begin", delay);
+                setTimeout(() => {
+                    step_briefing();
+                }, delay);
+            } else {
+                console.error('La vidéo pour la langue sélectionnée n\'a pas été préalablement chargée.');
+            }
+            */
+
+
+            
         });
     }
 
@@ -196,12 +197,13 @@ jQuery(function($) {
 
 
         // Change to briefing explaination and ask email after
-        let video = $('#briefing #video');
+        let video = $('#briefing #video-' + selected_lang);
         let source = video.find('source');
         if (selected_lang) {
             // This line displays a short video to avoid loosing 7 minutes of your life
             // source.attr('src', 'assets/medias/video/debug.mp4')
-            source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+            // source.attr('src', 'assets/medias/video/briefing-' + selected_lang + '.mp4')
+            video.fadeIn();
         }
         var video_preview = $('#briefing .videoPreview');
         video[0].load();
@@ -250,7 +252,7 @@ jQuery(function($) {
 
                     mediaRecorder.start();
 
-                    $('#briefing #video').on('ended', function() {
+                    $('#briefing #video-' + selected_lang).on('ended', function() {
                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                             mediaRecorder.stop();
                         }
@@ -281,7 +283,12 @@ jQuery(function($) {
         });
 
         $('section#askPicture .btn--cancel').on('click', function(){
-            stepChange('email');
+            // stepChange('email');
+            
+            popup('succes-no-picture', 10000);
+            setTimeout(() => {
+                location.reload();
+            }, 10000);
 
             // Unset picture in case user stepped back from email and takePicture
             group_picture_to_send = null;
@@ -294,15 +301,15 @@ jQuery(function($) {
         var capturedImage = $('#takePicture .takePicture-result-capturedImage');
         var canvas = $('#takePicture .takePicture-result-canva')[0];
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                video_preview.prop('srcObject', stream);
-                // $('#takePicture .videoPreview')[0].play();
-                
-            })
-            .catch(function(error) {
-                console.error('Error accessing webcam:', error);
-            });
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        //     .then(function(stream) {
+        //         video_preview.prop('srcObject', stream);
+        //         // $('#takePicture .videoPreview')[0].play();
+        //         
+        //     })
+        //     .catch(function(error) {
+        //         console.error('Error accessing webcam:', error);
+        //     });
 
         $('.btn--takePicture').on('click', function() {
 

@@ -1,0 +1,16 @@
+{
+    "name": "Sniper Zone",
+    "short_name": "sniper-zone",
+    "description": "Web app - briefing Sniper Zone",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#252425",
+    "theme_color": "#000000",
+    "icons": [
+        {
+          "src": "/assets/favicon/favicon-32x32.png",
+          "sizes": "32x32",
+          "type": "image/png"
+        }
+    ]
+}
