@@ -48,17 +48,17 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
 
         // Delete old cache
-        caches.keys().then((CACHE_NAME) => {
+        caches.keys().then((cacheNames) => {
 
-            return cache.addAll(urlsToCache);
+            // return cache.addAll(urlsToCache);
 
-            //return Promise.all(
-            //    CACHE_NAME.filter((name) => {
-            //        return name !== CACHE_NAME;
-            //    }).map((name) => {
-            //        return caches.delete(name);
-            //    })
-            //);
+            return Promise.all(
+                cacheNames.filter((name) => {
+                    return name !== CACHE_NAME;
+                }).map((name) => {
+                    return caches.delete(name);
+                })
+            );
         })
     );
 });
