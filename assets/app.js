@@ -301,15 +301,15 @@ jQuery(function($) {
         var capturedImage = $('#takePicture .takePicture-result-capturedImage');
         var canvas = $('#takePicture .takePicture-result-canva')[0];
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                video_preview.prop('srcObject', stream);
-                // $('#takePicture .videoPreview')[0].play();
-                
-            })
-            .catch(function(error) {
-                console.error('Error accessing webcam:', error);
-            });
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        //     .then(function(stream) {
+        //         video_preview.prop('srcObject', stream);
+        //         // $('#takePicture .videoPreview')[0].play();
+        //         
+        //     })
+        //     .catch(function(error) {
+        //         console.error('Error accessing webcam:', error);
+        //     });
 
         $('.btn--takePicture').on('click', function() {
 
