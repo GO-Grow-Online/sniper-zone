@@ -100,9 +100,11 @@ const VIDEOS_TO_CACHE = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-      caches.open(VIDEOS_CACHE_NAME).then((cache) => {
-        return cache.addAll(VIDEOS_TO_CACHE);
-      })
+        caches.open(VIDEOS_CACHE_NAME).then((cache) => {
+            return cache.addAll(VIDEOS_TO_CACHE).catch((error) => {
+              console.error('Cache.addAll error:', error);
+            });
+        })
     );
 });
 
