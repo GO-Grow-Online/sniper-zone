@@ -84,7 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail_admin->isHTML(true);
 
             $mail_admin->setFrom('noreplysniperzone@gmail.com', 'Sniper zone');
-            $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone'); // Change this to the desired Gmail address
+            // $mail_admin->addAddress('noreplysniperzone@gmail.com', 'Sniper zone');
+            $mail_admin->addAddress('julien.growonline@gmail.com', 'Sniper zone');
 
             $mail_admin->Subject = "Borne briefing - Sniper Zone";
             $mail_admin->Body = "Un nouveau client à utilisé la borne ! <br/> Voici son email : '" . $customerEmail . "' <br/> La preuve de vision du briefing sera disponible sur la borne durant 2 mois !";
