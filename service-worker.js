@@ -48,12 +48,12 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
 
         // Delete old cache
-        caches.keys().then((cacheNames) => {
+        caches.keys().then((CACHE_NAME) => {
 
             return cache.addAll(urlsToCache);
 
             //return Promise.all(
-            //    cacheNames.filter((name) => {
+            //    CACHE_NAME.filter((name) => {
             //        return name !== CACHE_NAME;
             //    }).map((name) => {
             //        return caches.delete(name);
