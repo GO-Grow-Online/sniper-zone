@@ -66,6 +66,10 @@ self.addEventListener('fetch', (event) => {
           return response;
         }
   
+        if (!navigator.onLine) {
+          return new Response('You are offline. Please check your internet connection.');
+        }
+  
         return fetch(event.request)
           .then((networkResponse) => {
             if (!networkResponse || networkResponse.status !== 200 || event.request.method !== 'GET') {
@@ -76,6 +80,9 @@ self.addEventListener('fetch', (event) => {
               cache.put(event.request, networkResponse.clone());
               return networkResponse;
             });
+          })
+          .catch((error) => {
+            console.error('Fetch error:', error);
           });
       })
     );
