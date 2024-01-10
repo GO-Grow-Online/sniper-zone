@@ -11,11 +11,11 @@ use PHPMailer\PHPMailer\Exception;
 
 $response = "";
 
-$servername = "localhost";
-$username = "Sniper Zone";
-$password = "sniper-zone";
+$servername = "sniperzobriefing.mysql.db";
+$username = "sniperzobriefing";
+$password = "Re8hR8jR3Y1aH3JWNMVYKXnqjcYKHD";
 
-$databaseName = "sniper_zone";
+$databaseName = "sniperzobriefing";
 $tableName = "customers";
 
 // Connection to DB

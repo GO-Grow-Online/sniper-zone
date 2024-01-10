@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Create an entry in database to keep a sorted record of each video associated with date and associated email
         // Connect to database
-        $conn = new mysqli('localhost', 'Sniper Zone', 'sniper-zone');
+        $conn = new mysqli('sniperzobriefing.mysql.db', 'sniperzobriefing', 'Re8hR8jR3Y1aH3JWNMVYKXnqjcYKHD');
 
         if ($conn->connect_error) {
             $response .= 'La connexion à la base de données a échoué : ' . $conn->connect_error;
