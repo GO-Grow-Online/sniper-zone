@@ -61,30 +61,24 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-      caches.match(event.request)
-          .then((response) => {
-              // Si la ressource est présente dans le cache, on la retourne
-              if (response) {
-                  return response;
-              }
-
-              // Sinon, on fait une requête réseau et on ajoute la réponse au cache
-              return fetch(event.request)
-                  .then((networkResponse) => {
-                      // On vérifie si la requête réseau a réussi
-                      if (!networkResponse || networkResponse.status !== 200) {
-                          return networkResponse;
-                      }
-
-                      // On ajoute la réponse au cache et on la retourne
-                      return caches.open(CACHE_NAME)
-                          .then((cache) => {
-                              cache.put(event.request, networkResponse.clone());
-                              return networkResponse;
-                          });
-                  });
-          })
-  );
-});
-
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+  
+        return fetch(event.request)
+          .then((networkResponse) => {
+            if (!networkResponse || networkResponse.status !== 200 || event.request.method !== 'GET') {
+              return networkResponse;
+            }
+  
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
+          });
+      })
+    );
+  });
+  
