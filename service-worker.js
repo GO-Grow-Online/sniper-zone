@@ -45,9 +45,13 @@ const urlsToCache = [
 
 
 self.addEventListener('install', (e) => {
-    e.waitUntil(caches.open(CACHE_NAME).then((cache) => {
-     return cache.addAll(urlsToCache);
-    }) );
+    e.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(urlsToCache)
+                .then(() => console.log('Service Worker: Installation successful'))
+                .catch((error) => console.error('Service Worker: Installation failed', error));
+        })
+    );
 });
 
 self.addEventListener('fetch', (e) => {
